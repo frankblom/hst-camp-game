@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="max-w-3xl mx-auto">
+  <div id="app" class="max-w-3xl mx-auto relative">
     <Header
       :profile="profile"
       v-if="isLoggedIn"
