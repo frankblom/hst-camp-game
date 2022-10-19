@@ -28,8 +28,9 @@ export default {
   data() {
     return {
       profile: null,
+      // page: null,
       page: "question",
-      kicked: true,
+      kicked: false,
     };
   },
   computed: {
