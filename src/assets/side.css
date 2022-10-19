@@ -1,0 +1,17 @@
+#app {
+  position: relative;
+  width: 960px;
+  height: 864px;
+  /* border: 1px solid white; */
+}
+
+.page {
+  float: left;
+  position: relative;
+  top: 0;
+  width: 192px;
+  height: 864px;
+  font-family: "Lato", sans-serif;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");

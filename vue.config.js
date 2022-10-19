@@ -22,5 +22,12 @@ module.exports = {
       title: "GameShow screen",
       chunks: ["chunk-vendors", "chunk-common", "screen"],
     },
+    side: {
+      entry: "src/app/side/side.js",
+      template: "public/index.html",
+      filename: "side.html",
+      title: "GameShow side screen",
+      chunks: ["chunk-vendors", "chunk-common", "side"],
+    },
   },
 };
