@@ -1,24 +1,33 @@
 <template>
-  <div id="app" class="text-blue-500">
-    <img alt="Vue logo" src="@/assets/logo.png" />
-    <span class="text-blue-500">Screen</span>
+  <div id="app">
+    <Home v-if="false" />
+    <Puzzle :question="puzzle" v-if="false" />
+    <Score />
   </div>
 </template>
 
 <script>
-import { db } from "./db";
+// import { db } from "./db";
+import Home from "./pages/home.vue";
+import Puzzle from "./pages/puzzle.vue";
+import Score from "./pages/score.vue";
 
 export default {
   name: "Screen",
-  data() {
-    return {
-      documents: [],
-    };
+  components: { Home, Puzzle, Score },
+
+  computed: {
+    puzzle() {
+      return {
+        text: {
+          nb: "Hvilken troshelt ser du på skjermen?",
+        },
+      };
+    },
   },
-  components: {},
-  firestore: {
-    documents: db.collection("players"),
-  },
+  // firestore: {
+  //   documents: db.collection("players"),
+  // },
 };
 </script>
 
