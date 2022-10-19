@@ -1,9 +1,7 @@
 <template>
-  <transition>
-    <div class="page">
-      <img class="logo" src="@/assets/logo.png" />
-    </div>
-  </transition>
+  <div class="page">
+    <img class="logo" src="@/assets/logo.png" />
+  </div>
 </template>
 
 <script>

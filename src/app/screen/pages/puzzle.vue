@@ -1,10 +1,8 @@
 <template>
-  <transition>
-    <div class="page">
-      <label class="label">Oppgave:</label>
-      <h2 class="question">{{ question.text["nb"] }}</h2>
-    </div>
-  </transition>
+  <div class="page">
+    <label class="label">Oppgave:</label>
+    <h2 class="question" v-if="question">{{ question.text["nb"] }}</h2>
+  </div>
 </template>
 
 <script>

@@ -1,0 +1,57 @@
+<template>
+  <div class="page">
+    <svg
+      class="icon"
+      width="98"
+      height="71"
+      viewBox="0 0 98 71"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M90.5 0H42.69C38.92 0 35.85 3.07 35.85 6.84V20.87H6.23C2.8 20.87 0 23.94 0 27.71V54.9C0 58.67 2.79 61.74 6.23 61.74H45.33C45.87 61.74 46.4 62 46.81 62.47L52.71 69.23C53.25 69.84 53.99 70.18 54.76 70.18C55.08 70.18 55.39 70.12 55.7 70.01C56.81 69.59 57.53 68.53 57.53 67.3V45.12H53.53V64.1L49.82 59.85C48.65 58.51 47.01 57.75 45.32 57.75H6.23C5.02 57.75 4 56.45 4 54.91V27.72C4 26.18 5.02 24.88 6.23 24.88H35.85V45.7C35.85 46.81 36.47 47.8 37.46 48.29C37.87 48.49 38.3 48.59 38.73 48.59C39.35 48.59 39.97 48.38 40.49 47.98L51.01 39.84C51.51 39.46 52.12 39.25 52.75 39.25H90.5C94.27 39.25 97.34 36.18 97.34 32.41V6.84C97.34 3.07 94.27 0 90.5 0ZM93.34 32.41C93.34 33.98 92.06 35.25 90.5 35.25H52.75C51.24 35.25 49.75 35.76 48.56 36.68L39.84 43.42V6.84C39.84 5.27 41.12 4 42.68 4H90.49C92.06 4 93.33 5.28 93.33 6.84V32.4L93.34 32.41Z"
+        fill="#E8D472"
+      />
+    </svg>
+    <h2 class="question" v-if="question">{{ question.text["NB"] }}</h2>
+    <div class="answers">
+      {{ question.text["NB"] }}
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    question: Object,
+    reveal: Boolean,
+  },
+  computed: {
+    showScore() {
+      return false;
+    },
+  },
+};
+</script>
+
+<style>
+.icon {
+  margin: 120px auto 15px auto;
+  display: block;
+}
+
+.question {
+  color: #e5e5e5;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.answers {
+  position: absolute;
+  top: 372px;
+}
+</style>

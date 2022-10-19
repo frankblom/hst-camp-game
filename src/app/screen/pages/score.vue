@@ -1,27 +1,25 @@
 <template>
-  <transition>
-    <div class="page">
-      <h2 class="title">Resultat:</h2>
-      <TransitionGroup class="scorebox" tag="div" name="slide-down">
-        <ScoreLine
-          v-for="(score, index) in result"
-          :score="score.answers"
-          :team="score.team"
-          :key="index"
-          :style="{ '--i': index }"
-          :highlighted="highlighted"
-        />
-      </TransitionGroup>
-      <button class="bg-white" @click="h('A')">Highlight A</button>
-      <button class="bg-white" @click="h('B')">Highlight B</button>
-      <button class="bg-white" @click="h('C')">Highlight C</button>
-      <button class="bg-white" @click="h('D')">Highlight D</button>
-      <br />
-      <button class="bg-blue-800 text-3xl text-white" @click="show()">
-        Show
-      </button>
-    </div>
-  </transition>
+  <div class="page">
+    <h2 class="title">Resultat:</h2>
+    <TransitionGroup class="scorebox" tag="div" name="slide-down">
+      <ScoreLine
+        v-for="(score, index) in result"
+        :score="score.answers"
+        :team="score.team"
+        :key="index"
+        :style="{ '--i': index }"
+        :highlighted="highlighted"
+      />
+    </TransitionGroup>
+    <button class="bg-white" @click="h('A')">Highlight A</button>
+    <button class="bg-white" @click="h('B')">Highlight B</button>
+    <button class="bg-white" @click="h('C')">Highlight C</button>
+    <button class="bg-white" @click="h('D')">Highlight D</button>
+    <br />
+    <button class="bg-blue-800 text-3xl text-white" @click="show()">
+      Show
+    </button>
+  </div>
 </template>
 
 <script>
