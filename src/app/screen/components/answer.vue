@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="w-full border-2 rounded-xl flex items-center pl-3 py-4 relative"
-    :class="[borderClass, bgClass]"
-  >
-    <div
-      class="label h-10 w-10 rounded-full flex-shrink-0 flex items-center justify-center"
-      :class="labelClass"
-    >
+  <div class="answer border-4 rounded-xl relative" :class="borderClass">
+    <div class="answer-label flex items-center justify-center">
       <span class="text-3xl font-bold disable-select">{{ option.label }}</span>
     </div>
-    <div class="px-2 disable-select">{{ option.text.en }}</div>
+    <div class="px-2 text-white disable-select answer-text flex items-center">
+      {{ option.Text.NB }}
+    </div>
     <div
       v-if="revealed"
       class="marker absolute flex items-center justify-center rounded-full"
@@ -17,32 +13,32 @@
     >
       <svg
         v-if="isCorrect"
-        width="14"
-        height="12"
-        viewBox="0 0 14 12"
+        width="26"
+        height="21"
+        viewBox="0 0 26 21"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M1.40002 5.7L5.60002 9.9L12.6 1.5"
-          stroke="black"
-          stroke-width="2.8"
+          d="M2.60004 10.3L10.4 18.1L23.4 2.5"
+          stroke="#0B071D"
+          stroke-width="5"
           stroke-linecap="round"
           stroke-linejoin="round"
         />
       </svg>
       <svg
         v-if="isWrong"
-        width="14"
-        height="14"
-        viewBox="0 0 14 14"
+        width="26"
+        height="26"
+        viewBox="0 0 26 26"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M12.6 1.3999L1.40002 12.5999M1.40002 1.3999L12.6 12.5999"
+          d="M23.4 2.59961L2.60004 23.3996M2.60004 2.59961L23.4 23.3996"
           stroke="black"
-          stroke-width="2.8"
+          stroke-width="5"
           stroke-linecap="round"
           stroke-linejoin="round"
         />
@@ -58,7 +54,6 @@ export default {
     selected: String,
     revealed: Boolean,
   },
-
   computed: {
     isCorrect() {
       if (!this.revealed) return false;
@@ -77,25 +72,14 @@ export default {
     borderClass() {
       return {
         "border-white": !this.revealed,
-        "border-red-400": this.isWrong,
-        "border-green-300": this.isCorrect,
+        "border-wrong": this.isWrong,
+        "border-correct": this.isCorrect,
       };
-    },
-    bgClass() {
-      if (!this.hasSelected) return;
-      return this.isSelected ? "selected" : "opacity-50";
     },
     markerClass() {
       return {
-        "bg-green-300": this.isCorrect,
-        "bg-red-400": this.isWrong,
-      };
-    },
-    labelClass() {
-      return {
-        "bg-yellow-300": !this.revealed,
-        "bg-red-400": this.isWrong,
-        "bg-green-300": this.isCorrect,
+        "bg-correct": this.isCorrect,
+        "bg-wrong": this.isWrong,
       };
     },
   },
@@ -103,18 +87,39 @@ export default {
 </script>
 
 <style>
-.label {
-  color: #1e1e1e;
+.answer {
+  width: 609px;
+  height: 175px;
+  margin-bottom: 60px;
 }
 
-.selected {
-  background: #2e2948;
+.answer-label {
+  background: #e8d472;
+  position: absolute;
+  color: #1e1e1e;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  top: 57px;
+  left: 30px;
+}
+
+.answer-text {
+  position: absolute;
+  font-size: 24px;
+  line-height: 38px;
+  font-weight: bold;
+  left: 120px;
+  width: 457px;
+  min-height: 170px;
 }
 
 .marker {
-  right: -0.9rem;
-  width: 1.8rem;
-  height: 1.8rem;
-  border: 2px solid #1e1e1e;
+  right: -26px;
+  width: 52px;
+  height: 50px;
+  top: 50%;
+  margin-top: -25px;
+  border: 4px solid #1e1e1e;
 }
 </style>

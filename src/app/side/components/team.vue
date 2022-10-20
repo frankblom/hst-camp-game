@@ -122,9 +122,21 @@
 </template>
 
 <script>
+const colors = {
+  green: "#95c93d",
+  red: "#d31c67",
+  blue: "#6fccdd",
+  orange: "#f68b2a",
+};
+
 export default {
   props: {
-    color: String,
+    name: String,
+  },
+  computed: {
+    color() {
+      return this.name ? colors[this.name] : "";
+    },
   },
 };
 </script>

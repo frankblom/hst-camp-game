@@ -12,6 +12,12 @@
     <transition name="fade">
       <Question :question="question" v-if="showQuestion" />
     </transition>
+    <transition name="fade">
+      <Penalty :teams="teamsList" v-if="showPenalty" />
+    </transition>
+    <transition name="fade">
+      <Results :teams="teamsList" :state="state?.results" v-if="showResults" />
+    </transition>
   </div>
 </template>
 
@@ -23,14 +29,23 @@ import Home from "./pages/home.vue";
 import Puzzle from "./pages/puzzle.vue";
 import Score from "./pages/score.vue";
 import Question from "./pages/question.vue";
+import Penalty from "./pages/penalty.vue";
+import Results from "./pages/results.vue";
 
 export default {
   name: "Screen",
-  components: { Home, Puzzle, Score, Question },
+  components: { Home, Puzzle, Score, Question, Penalty, Results },
   data() {
     return {
       page: null,
+      state: {},
       question: null,
+      teams: {
+        red: null,
+        blue: null,
+        green: null,
+        orange: null,
+      },
     };
   },
   computed: {
@@ -46,12 +61,46 @@ export default {
     showQuestion() {
       return this.page === "question" && this.question != null;
     },
+    showPenalty() {
+      return this.page === "penalty";
+    },
+    showResults() {
+      return this.page === "results";
+    },
+    teamsList() {
+      if (
+        !this.teams.orange ||
+        !this.teams.green ||
+        !this.teams.red ||
+        !this.teams.blue
+      )
+        return [];
+      return [
+        this.teams.orange,
+        this.teams.green,
+        this.teams.red,
+        this.teams.blue,
+      ];
+    },
   },
   created() {
     onSnapshot(doc(db, "games", "game"), (snap) => {
       const data = snap.data();
       this.page = data.page;
+      this.$set(this.state, "results", data.results);
       this.setquestion(data.question);
+    });
+    onSnapshot(doc(db, "teams", "orange"), (snap) => {
+      this.$set(this.teams, "orange", snap.data());
+    });
+    onSnapshot(doc(db, "teams", "blue"), (snap) => {
+      this.$set(this.teams, "blue", snap.data());
+    });
+    onSnapshot(doc(db, "teams", "red"), (snap) => {
+      this.$set(this.teams, "red", snap.data());
+    });
+    onSnapshot(doc(db, "teams", "green"), (snap) => {
+      this.$set(this.teams, "green", snap.data());
     });
   },
   methods: {

@@ -2,7 +2,7 @@
   <div class="page text-white">
     <div class="text-xl text-center w-full" v-if="team">
       <h2 class="score text-white">{{ team.players }}</h2>
-      <team :color="color" class="team" />
+      <Team :color="color" class="team" />
       <transition name="fade">
         <div
           class="text-center flex items-center justify-center penalty"
@@ -39,7 +39,7 @@ const colors = {
   blue: "#6fccdd",
   orange: "#f68b2a",
 };
-import Team from "./../components/team.vue";
+import Team from "../components/team.vue";
 export default {
   components: { Team },
   props: {
