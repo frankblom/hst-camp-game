@@ -4,13 +4,13 @@
       <Home v-if="showHome" />
     </transition>
     <transition name="fade">
-      <Puzzle v-if="showPuzzle" :question="game.question" />
+      <Puzzle v-if="showPuzzle" :question="question" />
     </transition>
     <transition name="fade">
-      <Score v-if="showScore" :question="game.question" />
+      <Score v-if="showScore" :question="question" />
     </transition>
     <transition name="fade">
-      <Question :question="game.question" :game="game" v-if="showQuestion" />
+      <Question :question="question" :game="game" v-if="showQuestion" />
     </transition>
     <transition name="fade">
       <Penalty :teams="teamsList" v-if="showPenalty" />
@@ -58,19 +58,19 @@ export default {
     showPuzzle() {
       return (
         this.isQuestion &&
-        this.game &&
-        this.game.question &&
+        Boolean(this.question) &&
         this.game.question.type === "pre"
       );
     },
     showScore() {
-      return this.game && this.game.page === PAGE_SCORE;
+      return (
+        this.game && this.game.page === PAGE_SCORE && Boolean(this.question)
+      );
     },
     showQuestion() {
       return (
         this.isQuestion &&
-        this.game &&
-        this.game.question &&
+        Boolean(this.question) &&
         this.game.question.type === "game"
       );
     },
@@ -85,6 +85,12 @@ export default {
     },
     teamsList() {
       return this.teams;
+    },
+    question() {
+      if (!this.game.question) return null;
+      if (typeof this.game.question != "object") return null;
+
+      return this.game.question;
     },
   },
 

@@ -16,7 +16,15 @@
 
 <script>
 import ScoreLine from "../components/ScoreLine.vue";
+
 import { db } from "../db";
+import {
+  collection,
+  getCountFromServer,
+  query,
+  where,
+} from "firebase/firestore";
+
 export default {
   components: { ScoreLine },
   props: {
@@ -86,9 +94,41 @@ export default {
     show() {
       this.showScore = !this.showScore;
     },
+    async getCountForAnswer(team_id, answer_id) {
+      const query_ = query(
+        collection(db, "answers"),
+        where("answer_id", "==", answer_id),
+        where("team_id", "==", team_id)
+      );
+
+      const snapshot = await getCountFromServer(query_);
+      console.log("count: ", snapshot.data().count);
+      return snapshot.data().count;
+    },
   },
-  mounted() {
-    console.log("TESTY");
+  watch: {
+    question: {
+      deep: true,
+      immediate: true,
+      handler() {
+        if (!this.question) return;
+        // const options = Object.values(this.question.options);
+        const answer = this.getCountForAnswer("green", "PG-3-A");
+        console.log(answer);
+        // const r = ["blue", "green", "orange", "red"].map((team_id) => {
+        //   const team = { id: team_id, answers: {} };
+
+        //   options.forEach((option) => {
+        //     team.answers[option.label] = this.getCountForAnswer(
+        //       team_id,
+        //       option.id
+        //     );
+        //   });
+        // });
+
+        // console.log(r);
+      },
+    },
   },
 };
 </script>
