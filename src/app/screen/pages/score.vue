@@ -11,21 +11,17 @@
         :highlighted="highlighted"
       />
     </TransitionGroup>
-    <button class="bg-white" @click="h('A')">Highlight A</button>
-    <button class="bg-white" @click="h('B')">Highlight B</button>
-    <button class="bg-white" @click="h('C')">Highlight C</button>
-    <button class="bg-white" @click="h('D')">Highlight D</button>
-    <br />
-    <button class="bg-blue-800 text-3xl text-white" @click="show()">
-      Show
-    </button>
   </div>
 </template>
 
 <script>
 import ScoreLine from "../components/ScoreLine.vue";
+import { db } from "../db";
 export default {
   components: { ScoreLine },
+  props: {
+    question: Object,
+  },
   data() {
     return {
       highlighted: "B",
@@ -90,6 +86,9 @@ export default {
     show() {
       this.showScore = !this.showScore;
     },
+  },
+  mounted() {
+    console.log("TESTY");
   },
 };
 </script>

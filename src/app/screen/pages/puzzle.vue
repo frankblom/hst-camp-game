@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <label class="label">Oppgave:</label>
-    <h2 class="question" v-if="question">{{ question.text["nb"] }}</h2>
+    <h2 class="question" v-if="question">{{ $t("PG-text") }}</h2>
   </div>
 </template>
 
@@ -9,11 +9,6 @@
 export default {
   props: {
     question: Object,
-  },
-  computed: {
-    showScore() {
-      return false;
-    },
   },
 };
 </script>

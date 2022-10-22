@@ -1,0 +1,20 @@
+{
+  "log-in-title": "Log in to join the competition",
+  "log-in-button": "Log in",
+  "waiting-title": "Waiting for a quetsion",
+  "waiting-subtitle": "You can close the app in between the questions",
+  "logged-in-as": "You are logged in as",
+  "log-out-button": "Log out",
+  "team-blue-participant": "You are on team blue",
+  "team-pink-participant": "You are on the pink team",
+  "team-orange-participant": "You are on the orange team",
+  "team-green-participant": "You are on team green",
+  "answer-correct": "Correct!",
+  "answer-wrong": "Wrong answer",
+  "kicked-title": "Game over",
+  "kicked-subtitle": "You are out of the competition, but you can still support your team!",
+  "congrats-blue": "Congrats Team Blue!",
+  "congrats-pink": "Congrats Team Pink!",
+  "congrats-orange": "Congrats Team Orange!",
+  "congrats-green": "Congrats Team Green!"
+}

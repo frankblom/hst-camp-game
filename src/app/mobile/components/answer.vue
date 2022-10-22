@@ -10,7 +10,7 @@
     >
       <span class="text-3xl font-bold disable-select">{{ option.label }}</span>
     </div>
-    <div class="px-2 disable-select">{{ option.text.en }}</div>
+    <div class="px-2 disable-select">{{ $t(option.id) }}</div>
     <div
       v-if="revealed"
       class="marker absolute flex items-center justify-center rounded-full"
@@ -59,7 +59,6 @@ export default {
     selected: String,
     revealed: Boolean,
   },
-
   computed: {
     isCorrect() {
       if (!this.revealed) return false;

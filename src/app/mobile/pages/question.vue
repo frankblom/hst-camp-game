@@ -1,61 +1,88 @@
 <template>
   <div class="h-screen">
-    <div
-      v-if="showQuestion"
-      class="px-4 flex flex flex-col h-screen text-white items-center pt-16 justify-between"
-    >
-      <div class="w-full text-2xl text-center mb-4">
-        {{ question.text.en }}
+    <transition name="fade">
+      <div
+        class="px-4 flex flex flex-col h-screen text-white items-center pt-16 justify-evenly"
+        v-if="!showScore"
+      >
+        <div class="w-full text-2xl text-center mb-4">
+          {{ $t(questionKey) }}
+        </div>
+        <transition name="fade">
+          <div class="w-full space-y-3 px-2" v-if="showOptions">
+            <Answer
+              v-for="option in answers"
+              :key="option.id"
+              :option="option"
+              :selected="selected"
+              :revealed="reveal"
+              @select="selectAnswer"
+            />
+          </div>
+        </transition>
+        <div class="w-full flex-none text-center py-4">
+          <!-- <span class="text-gray-400">1 av 4</span> -->
+        </div>
       </div>
-      <div class="w-full space-y-3 px-2">
-        <Answer
-          v-for="option in question.options"
-          :key="option.id"
-          :option="option"
-          :selected="selected"
-          :revealed="revealed"
-          @select="selectAnswer"
-        />
+    </transition>
+    <transition name="fade">
+      <div v-if="showScore" class="h-screen flex items-center">
+        <div v-if="isCorrect" class="text-white text-center w-full">
+          <img class="w-32 h-32 mx-auto" src="@/assets/correct.png" />
+          <h2 class="text-4xl py-4">{{ $t("answer-correct") }}</h2>
+          <span class="text-6xl font-bold">+74</span>
+        </div>
+        <div v-else class="text-white text-center w-full">
+          <img class="w-32 h-32 mx-auto" src="@/assets/wrong.png" />
+          <h2 class="text-4xl py-4">{{ $t("answer-wrong") }}</h2>
+          <span class="text-6xl font-bold">+0</span>
+        </div>
       </div>
-      <div class="w-full flex-none text-center py-4">
-        <span class="text-gray-400">1 av 4</span>
-      </div>
-    </div>
-    <div v-if="showScore" class="h-screen flex items-center">
-      <div v-if="isCorrect" class="text-white text-center w-full">
-        <img class="w-32 h-32 mx-auto" src="@/assets/correct.png" />
-        <h2 class="text-4xl py-4">Riktig svar!</h2>
-        <span class="text-6xl font-bold">+74</span>
-      </div>
-      <div v-else class="text-white text-center w-full">
-        <img class="w-32 h-32 mx-auto" src="@/assets/wrong.png" />
-        <h2 class="text-4xl py-4">Feil svar!</h2>
-        <span class="text-6xl font-bold">+0</span>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import Answer from "../components/answer.vue";
+import { answerSort } from "@/app/functions.js";
+import {
+  SHOW_ANSWERS_STEP,
+  SCORE_STEP,
+  START_CLOCK_STEP,
+} from "@/const/steps.js";
 export default {
   components: { Answer },
   props: {
     question: Object,
+    response: Object,
   },
   data() {
     return {
       selected: null,
-      revealed: false,
-      view: "question",
     };
   },
   computed: {
-    showQuestion() {
-      return this.view === "question";
+    questionKey() {
+      return this.question.type == "game"
+        ? `${this.question.id}-text`
+        : "PG-text";
+    },
+    reveal() {
+      return this.question.step >= SHOW_ANSWERS_STEP;
     },
     showScore() {
-      return !this.showQuestion;
+      return this.question.step >= SCORE_STEP;
+    },
+    showOptions() {
+      return this.question.step >= START_CLOCK_STEP;
+    },
+    answers() {
+      return Object.keys(this.question.options)
+        .map((id) => ({
+          ...this.question.options[id],
+          id,
+        }))
+        .sort(answerSort);
     },
     isCorrect() {
       if (!this.selected) return false;
@@ -67,11 +94,39 @@ export default {
       if (this.selected !== null) return;
       this.selected = option.id;
 
-      setTimeout(() => (this.revealed = true), 1000);
-      setTimeout(() => (this.view = "score"), 2000);
+      this.$emit("answer", {
+        answer: option,
+        question: this.question,
+      });
+    },
+  },
+  watch: {
+    response: {
+      deep: true,
+      immediate: true,
+      handler() {
+        if (this.response) {
+          this.selected = this.response.answer_id;
+        } else {
+          this.selected = null;
+        }
+      },
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter-active {
+  transition-delay: 500ms;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

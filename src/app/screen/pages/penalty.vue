@@ -1,9 +1,19 @@
 <template>
   <div class="page">
     <h2 class="page-title">Straff:</h2>
-    <div class="penalty-teams flex justify-between">
-      <PenaltyBox :team="team" v-for="(team, index) in teams" :key="index" />
-    </div>
+    <TransitionGroup
+      appear
+      tag="div"
+      class="penalty-teams flex justify-between"
+      name="results"
+    >
+      <PenaltyBox
+        :team="team"
+        v-for="(team, index) in teams"
+        :key="index"
+        :style="{ '--i': index }"
+      />
+    </TransitionGroup>
   </div>
 </template>
 

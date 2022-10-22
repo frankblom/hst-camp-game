@@ -2,10 +2,10 @@
   <div class="page">
     <h2 class="page-title">Resultat:</h2>
     <div class="result-teams flex flex-wrap">
-      <TransitionGroup tag="div" class="w-full" name="results">
+      <TransitionGroup appear tag="div" class="w-full" name="results">
         <div
           class="result-team flex w-full items-center"
-          v-for="(team, index) in teamsList"
+          v-for="(team, index) in teams"
           :style="{ '--i': index }"
           :key="index"
         >
@@ -28,14 +28,6 @@ export default {
   props: {
     teams: Array,
     state: Object,
-  },
-  computed: {
-    teamsList() {
-      return this.state && this.state.reveal ? this.teams : [];
-    },
-  },
-  mounted() {
-    // setTimeout(() => (this.showScore = true), 1000);
   },
 };
 </script>
@@ -73,28 +65,5 @@ export default {
 
 .result-team-icon {
   margin-left: 70px;
-}
-
-.results-move {
-  transition: opacity 1s linear, transform 1s ease-in-out;
-}
-
-.results-leave-active {
-  transition: opacity 1s linear, transform 1s cubic-bezier(0.5, 0, 0.7, 0.4);
-  transition-delay: calc(0.1s * (0 - var(--i)));
-}
-.results-enter-active {
-  transition: opacity 1s linear, transform 1s cubic-bezier(0.2, 0.5, 0.1, 1);
-  transition-delay: calc(0.2s * var(--i));
-}
-.results-enter,
-.results-leave-to {
-  opacity: 0;
-}
-.results-enter {
-  transform: translateY(-100px);
-}
-.results-leave-to {
-  transform: translateY(-100px);
 }
 </style>

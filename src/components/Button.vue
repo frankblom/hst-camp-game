@@ -1,5 +1,9 @@
 <template>
-  <button class="rounded-xl w-full" :class="[bgClass, padding]">
+  <button
+    class="rounded-xl w-full"
+    :class="[bgClass, padding]"
+    @click="$emit('click')"
+  >
     <slot />
   </button>
 </template>

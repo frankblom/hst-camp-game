@@ -32,13 +32,15 @@
         >{{ question.number }} .</span
       >
     </div>
-    <h2 class="question" v-if="question">{{ question.text["NB"] }}</h2>
+    <h2 class="question" v-if="question">
+      {{ $t(questionKey) }}
+    </h2>
     <div class="answers flex flex-wrap justify-between">
       <Answer
         v-for="option in answers"
         :key="option.id"
         :option="option"
-        :revealed="true"
+        :revealed="reveal"
       />
     </div>
   </div>
@@ -47,19 +49,30 @@
 <script>
 import Answer from "../components/answer.vue";
 import { answerSort } from "@/app/functions.js";
+import { SHOW_ANSWERS_STEP } from "@/const/steps.js";
 export default {
   components: { Answer },
   props: {
     question: Object,
-    reveal: Boolean,
+    game: Object,
   },
   computed: {
     showScore() {
       return false;
     },
+    questionKey() {
+      return `${this.question.id}-text`;
+    },
+    reveal() {
+      return this.question.step >= SHOW_ANSWERS_STEP;
+    },
     answers() {
-      if (!this.question) return [];
-      return Object.values(this.question.Options).sort(answerSort);
+      return Object.keys(this.question.options)
+        .map((id) => ({
+          ...this.question.options[id],
+          id,
+        }))
+        .sort(answerSort);
     },
   },
 };
@@ -67,7 +80,7 @@ export default {
 
 <style>
 .icon {
-  margin: 120px auto 15px auto;
+  margin: 100px auto 15px auto;
   display: block;
   width: 98px;
 }

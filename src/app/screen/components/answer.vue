@@ -4,7 +4,7 @@
       <span class="text-3xl font-bold disable-select">{{ option.label }}</span>
     </div>
     <div class="px-2 text-white disable-select answer-text flex items-center">
-      {{ option.Text.NB }}
+      {{ $t(option.id) }}
     </div>
     <div
       v-if="revealed"

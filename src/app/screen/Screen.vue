@@ -4,26 +4,24 @@
       <Home v-if="showHome" />
     </transition>
     <transition name="fade">
-      <Puzzle v-if="showPuzzle" />
+      <Puzzle v-if="showPuzzle" :question="game.question" />
     </transition>
     <transition name="fade">
-      <Score v-if="showScore" />
+      <Score v-if="showScore" :question="game.question" />
     </transition>
     <transition name="fade">
-      <Question :question="question" v-if="showQuestion" />
+      <Question :question="game.question" :game="game" v-if="showQuestion" />
     </transition>
     <transition name="fade">
       <Penalty :teams="teamsList" v-if="showPenalty" />
     </transition>
     <transition name="fade">
-      <Results :teams="teamsList" :state="state?.results" v-if="showResults" />
+      <Results :teams="teamsList" :game="game" v-if="showResults" />
     </transition>
   </div>
 </template>
 
 <script>
-import { doc, onSnapshot, getDoc } from "firebase/firestore";
-
 import { db } from "./db";
 import Home from "./pages/home.vue";
 import Puzzle from "./pages/puzzle.vue";
@@ -32,91 +30,68 @@ import Question from "./pages/question.vue";
 import Penalty from "./pages/penalty.vue";
 import Results from "./pages/results.vue";
 
+import {
+  PAGE_HOME,
+  PAGE_QUESTION,
+  PAGE_PENALTY,
+  PAGE_SCORE,
+  PAGE_RESULTS,
+  PAGE_WINNER,
+} from "@/const/pages.js";
+
 export default {
   name: "Screen",
   components: { Home, Puzzle, Score, Question, Penalty, Results },
   data() {
     return {
-      page: null,
-      state: {},
-      question: null,
-      teams: {
-        red: null,
-        blue: null,
-        green: null,
-        orange: null,
-      },
+      game: null,
+      teams: null,
     };
   },
   computed: {
     showHome() {
-      return this.page === "home";
+      return this.game && this.game.page == PAGE_HOME;
+    },
+    isQuestion() {
+      return this.game && this.game.page === PAGE_QUESTION;
     },
     showPuzzle() {
-      return this.page === "puzzle";
+      return (
+        this.isQuestion &&
+        this.game &&
+        this.game.question &&
+        this.game.question.type === "pre"
+      );
     },
     showScore() {
-      return this.page === "score";
+      return this.game && this.game.page === PAGE_SCORE;
     },
     showQuestion() {
-      return this.page === "question" && this.question != null;
+      return (
+        this.isQuestion &&
+        this.game &&
+        this.game.question &&
+        this.game.question.type === "game"
+      );
     },
     showPenalty() {
-      return this.page === "penalty";
+      return this.game && this.game.page === PAGE_PENALTY;
     },
     showResults() {
-      return this.page === "results";
+      return this.game && this.game.page === PAGE_RESULTS;
+    },
+    showWinner() {
+      return this.game && this.game.page === PAGE_WINNER;
     },
     teamsList() {
-      if (
-        !this.teams.orange ||
-        !this.teams.green ||
-        !this.teams.red ||
-        !this.teams.blue
-      )
-        return [];
-      return [
-        this.teams.orange,
-        this.teams.green,
-        this.teams.red,
-        this.teams.blue,
-      ];
+      return this.teams;
     },
   },
-  created() {
-    onSnapshot(doc(db, "games", "game"), (snap) => {
-      const data = snap.data();
-      this.page = data.page;
-      this.$set(this.state, "results", data.results);
-      this.setquestion(data.question);
-    });
-    onSnapshot(doc(db, "teams", "orange"), (snap) => {
-      this.$set(this.teams, "orange", snap.data());
-    });
-    onSnapshot(doc(db, "teams", "blue"), (snap) => {
-      this.$set(this.teams, "blue", snap.data());
-    });
-    onSnapshot(doc(db, "teams", "red"), (snap) => {
-      this.$set(this.teams, "red", snap.data());
-    });
-    onSnapshot(doc(db, "teams", "green"), (snap) => {
-      this.$set(this.teams, "green", snap.data());
-    });
-  },
-  methods: {
-    async setquestion(reference) {
-      if (!reference) {
-        this.question = null;
-        return;
-      }
 
-      const question = await getDoc(doc(db, "questions", reference));
-      if (question.exists()) {
-        this.question = question.data();
-      } else {
-        this.question = null;
-      }
-    },
+  firestore: {
+    game: db.collection("games").doc("game"),
+    questions: db.collection("questions").orderBy("order"),
+    teams: db.collection("teams").orderBy("index"),
   },
 };
 </script>
@@ -133,5 +108,28 @@ export default {
 
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+.results-move {
+  transition: opacity 1s linear, transform 1s ease-in-out;
+}
+
+.results-leave-active {
+  transition: opacity 1s linear, transform 1s cubic-bezier(0.5, 0, 0.7, 0.4);
+  transition-delay: calc(0.1s * (0 - var(--i)));
+}
+.results-enter-active {
+  transition: opacity 1s linear, transform 1s cubic-bezier(0.2, 0.5, 0.1, 1);
+  transition-delay: calc(0.2s * var(--i));
+}
+.results-enter,
+.results-leave-to {
+  opacity: 0;
+}
+.results-enter {
+  transform: translateY(-100px);
+}
+.results-leave-to {
+  transform: translateY(-100px);
 }
 </style>

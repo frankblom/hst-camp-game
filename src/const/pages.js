@@ -1,0 +1,43 @@
+export const PAGE_HOME = "home";
+export const PAGE_QUESTION = "question";
+export const PAGE_PENALTY = "penalty";
+export const PAGE_SCORE = "score";
+export const PAGE_RESULTS = "results";
+export const PAGE_WINNER = "winner";
+export const PAGE_BLANK = "blank";
+
+import {
+  NO_STEP,
+  SHOW_QUESTION_STEP,
+  START_CLOCK_STEP,
+  STOP_CLOCK_STEP,
+  SHOW_ANSWERS_STEP,
+  SCORE_STEP,
+  PENALTY_STEP,
+  APPLY_PENALTY_STEP,
+  RESULT_STEP,
+  WINNER_STEP,
+} from "@/const/steps.js";
+
+export const PAGE_FOR_STEPS = {
+  [NO_STEP]: PAGE_HOME,
+  [SHOW_QUESTION_STEP]: PAGE_QUESTION,
+  [START_CLOCK_STEP]: PAGE_QUESTION,
+  [STOP_CLOCK_STEP]: PAGE_QUESTION,
+  [SHOW_ANSWERS_STEP]: PAGE_QUESTION,
+  [SCORE_STEP]: PAGE_SCORE,
+  [PENALTY_STEP]: PAGE_PENALTY,
+  [APPLY_PENALTY_STEP]: PAGE_PENALTY,
+  [RESULT_STEP]: PAGE_RESULTS,
+  [WINNER_STEP]: PAGE_WINNER,
+};
+
+export default [
+  PAGE_HOME,
+  PAGE_QUESTION,
+  PAGE_PENALTY,
+  PAGE_SCORE,
+  PAGE_RESULTS,
+  PAGE_WINNER,
+  PAGE_BLANK,
+];
