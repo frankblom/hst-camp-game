@@ -1,8 +1,8 @@
 <template>
   <div class="page text-white">
     <div class="text-xl text-center w-full" v-if="team">
-      <h2 class="score text-white">{{ team.players }}</h2>
-      <Team :color="color" class="team" />
+      <h2 class="score text-white">{{ playerCount }}</h2>
+      <Team :name="team.name" class="team" />
       <transition name="fade">
         <div
           class="text-center flex items-center justify-center penalty"
@@ -33,27 +33,47 @@
 </template>
 
 <script>
-const colors = {
-  green: "#95c93d",
-  red: "#d31c67",
-  blue: "#6fccdd",
-  orange: "#f68b2a",
-};
 import Team from "../components/team.vue";
+import { APPLY_PENALTY_STEP } from "@/const/steps.js";
+
 export default {
   components: { Team },
   props: {
     team: Object,
+    count: Number,
+    kicked: Array,
+    question: Object,
   },
   computed: {
     teamClass() {
       return `team-${this.team.name}`;
     },
-    color() {
-      return colors[this.team.name];
+    playerCount() {
+      if (!this.count) return 0;
+      if (this.kickedCount > this.count) return 0;
+      return this.count - this.kickedCount;
+    },
+    currentQuestionId() {
+      return this?.question?.id;
+    },
+    kickedCount() {
+      return (
+        this.kicked
+          .filter((k) => k.question_id != this.currentQuestionId)
+          .reduce((count, kick) => count + kick.count, 0) + this.penatlyCount
+      );
     },
     penatlyCount() {
-      return this.team ? this.team.kicked_count : 0;
+      if (!this.currentQuestionId) return 0;
+
+      if (this.question.step < APPLY_PENALTY_STEP) {
+        return 0;
+      }
+
+      const kicked = this.kicked.find(
+        (k) => k.question_id === this.question.id
+      );
+      return kicked ? kicked.count : 0;
     },
   },
 };

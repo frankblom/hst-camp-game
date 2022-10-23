@@ -91,6 +91,7 @@ export default {
   width: 609px;
   height: 175px;
   margin-bottom: 60px;
+  transition: border-color 100ms linear;
 }
 
 .answer-label {

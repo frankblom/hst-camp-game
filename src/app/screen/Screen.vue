@@ -13,10 +13,19 @@
       <Question :question="question" :game="game" v-if="showQuestion" />
     </transition>
     <transition name="fade">
-      <Penalty :teams="teamsList" v-if="showPenalty" />
+      <Penalty
+        :teams="teamsList"
+        :game="game"
+        :kicks="kicks"
+        v-if="showPenalty"
+      />
     </transition>
     <transition name="fade">
-      <Results :teams="teamsList" :game="game" v-if="showResults" />
+      <Results
+        :teams="teamsList"
+        :leaderboard="leaderboard"
+        v-if="showResults"
+      />
     </transition>
   </div>
 </template>
@@ -46,6 +55,8 @@ export default {
     return {
       game: null,
       teams: null,
+      kicks: [],
+      points: [],
     };
   },
   computed: {
@@ -92,12 +103,28 @@ export default {
 
       return this.game.question;
     },
+    leaderboard() {
+      return this.teams
+        .map((t) => ({
+          ...t,
+          points: this.points
+            .filter((p) => p.team_id == t.id)
+            .reduce((acc, item) => acc + item.count, 0),
+        }))
+        .sort((a, b) => {
+          if (a.points > b.points) return -1;
+          if (a.points < b.points) return +1;
+          return 0;
+        });
+    },
   },
 
   firestore: {
     game: db.collection("games").doc("game"),
     questions: db.collection("questions").orderBy("order"),
     teams: db.collection("teams").orderBy("index"),
+    kicks: db.collection("kicks"),
+    points: db.collection("points"),
   },
 };
 </script>

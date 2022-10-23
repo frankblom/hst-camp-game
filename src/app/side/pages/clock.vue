@@ -41,7 +41,7 @@ export default {
       };
     },
     ticking() {
-      return this.game.question.step == START_CLOCK_STEP;
+      return this.game?.question?.step == START_CLOCK_STEP;
     },
     totalSeconds() {
       return this.game.question.time;

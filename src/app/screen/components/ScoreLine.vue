@@ -6,9 +6,8 @@
       :label="label"
       :team="team"
       :total="totalAnswers"
-      :highest="highestScore"
       :highlighted="highlighted == label"
-      :score="scoreForKey(label)"
+      :score="score[label].count"
     />
   </div>
 </template>
@@ -18,16 +17,13 @@ import ScoreBlock from "./ScoreBlock.vue";
 export default {
   components: { ScoreBlock },
   props: {
-    score: Array,
+    score: Object,
     team: String,
     highlighted: String,
   },
   computed: {
     totalAnswers() {
-      return this.score.reduce((acc, s) => acc + s.count, 0);
-    },
-    highestScore() {
-      return this.score.map((x) => x.count).sort((a, b) => b - a)[0];
+      return Object.values(this.score).reduce((acc, s) => acc + s.count, 0);
     },
     labels() {
       return ["A", "B", "C", "D"];

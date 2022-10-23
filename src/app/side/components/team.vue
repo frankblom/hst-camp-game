@@ -124,7 +124,7 @@
 <script>
 const colors = {
   green: "#95c93d",
-  red: "#d31c67",
+  pink: "#d31c67",
   blue: "#6fccdd",
   orange: "#f68b2a",
 };

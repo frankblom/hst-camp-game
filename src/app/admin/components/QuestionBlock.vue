@@ -107,7 +107,9 @@ export default {
       });
     },
     clear() {
-      this.setStep(NO_STEP);
+      db.collection("questions")
+        .doc(this.question.id)
+        .update({ step: NO_STEP });
     },
     startClock() {},
     setScore() {},

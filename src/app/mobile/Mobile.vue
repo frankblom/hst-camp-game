@@ -112,7 +112,9 @@ export default {
     login() {
       const id = 10547;
       const key = `player-${id}`;
-      this.$bind("player", db.collection("players").doc(key));
+      const player = db.collection("players").doc(key);
+      this.$bind("player", player);
+      player.update({ logged_in: true });
 
       this.$bind(
         "answers",

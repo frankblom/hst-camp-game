@@ -8,7 +8,7 @@
         :team="score.team"
         :key="index"
         :style="{ '--i': index }"
-        :highlighted="highlighted"
+        :highlighted="correct"
       />
     </TransitionGroup>
   </div>
@@ -25,6 +25,8 @@ import {
   where,
 } from "firebase/firestore";
 
+const teams = ["blue", "pink", "orange", "green"];
+
 export default {
   components: { ScoreLine },
   props: {
@@ -32,69 +34,54 @@ export default {
   },
   data() {
     return {
-      highlighted: "B",
-      showScore: true,
+      responses: {},
     };
   },
   computed: {
+    correct() {
+      if (!this.question || !this.question.correct) return false;
+      return this.question.correct;
+    },
+    isLoading() {
+      // 4 for 4 teams
+      if (Object.keys(this.responses).length < 4) return true;
+
+      if (Object.keys(this.responses[teams[0]].answers).length < 4) return true;
+      if (Object.keys(this.responses[teams[1]].answers).length < 4) return true;
+      if (Object.keys(this.responses[teams[2]].answers).length < 4) return true;
+      if (Object.keys(this.responses[teams[3]].answers).length < 4) return true;
+
+      return false;
+    },
+    order() {
+      if (this.isLoading || !this.correct) return [];
+      // order the teams so the one with the most correct answers is on top
+      return teams.sort((a, b) => {
+        if (
+          this.responses[a].answers[this.correct].count >
+          this.responses[b].answers[this.correct].count
+        )
+          return -1;
+        if (
+          this.responses[a].answers[this.correct].count <
+          this.responses[b].answers[this.correct].count
+        )
+          return 1;
+        return 0;
+      });
+    },
     result() {
-      if (!this.showScore) return [];
-      return [
-        {
-          pos: 0,
-          team: "red",
-          answers: [
-            { label: "A", count: 100 },
-            { label: "B", count: 400 },
-            { label: "C", count: 185 },
-            { label: "D", count: 2 },
-          ],
-        },
-        {
-          pos: 1,
-          team: "green",
-          answers: [
-            { label: "A", count: 2 },
-            { label: "B", count: 600 },
-            { label: "C", count: 185 },
-            { label: "D", count: 600 },
-          ],
-        },
-        {
-          pos: 2,
-          team: "blue",
-          answers: [
-            { label: "A", count: 200 },
-            { label: "B", count: 900 },
-            { label: "C", count: 185 },
-            { label: "D", count: 2 },
-          ],
-        },
-        {
-          pos: 3,
-          team: "orange",
-          answers: [
-            { label: "A", count: 96 },
-            { label: "B", count: 500 },
-            { label: "C", count: 185 },
-            { label: "D", count: 2 },
-          ],
-        },
-      ];
+      if (this.isLoading) return [];
+
+      return this.order.map((team, index) => ({
+        ...this.responses[team],
+        pos: index,
+        team: team,
+      }));
     },
   },
   methods: {
-    h(key) {
-      if (this.highlighted) {
-        this.$set(this, "highlighted", null);
-      } else {
-        this.$set(this, "highlighted", key);
-      }
-    },
-    show() {
-      this.showScore = !this.showScore;
-    },
-    async getCountForAnswer(team_id, answer_id) {
+    async teamAnswersCount(team_id, answer_id) {
       const query_ = query(
         collection(db, "answers"),
         where("answer_id", "==", answer_id),
@@ -102,31 +89,45 @@ export default {
       );
 
       const snapshot = await getCountFromServer(query_);
-      console.log("count: ", snapshot.data().count);
       return snapshot.data().count;
+    },
+    setScore(team, option, count) {
+      if (!this.responses[team]) {
+        this.$set(this.responses, team, {
+          team,
+          answers: {},
+        });
+      }
+      this.$set(this.responses[team].answers, option.label, {
+        label: option.label,
+        count,
+      });
+    },
+    clear() {
+      this.$set(this, "responses", {});
     },
   },
   watch: {
     question: {
       deep: true,
       immediate: true,
-      handler() {
-        if (!this.question) return;
-        // const options = Object.values(this.question.options);
-        const answer = this.getCountForAnswer("green", "PG-3-A");
-        console.log(answer);
-        // const r = ["blue", "green", "orange", "red"].map((team_id) => {
-        //   const team = { id: team_id, answers: {} };
+      async handler() {
+        if (!this.question) {
+          console.log("TEST");
+          return;
+        }
+        this.clear();
 
-        //   options.forEach((option) => {
-        //     team.answers[option.label] = this.getCountForAnswer(
-        //       team_id,
-        //       option.id
-        //     );
-        //   });
-        // });
+        const options = this.question.options;
+        const answer_ids = Object.keys(options);
 
-        // console.log(r);
+        teams.forEach((team) =>
+          answer_ids.forEach((answer_id) => {
+            this.teamAnswersCount(team, answer_id).then((count) => {
+              this.setScore(team, options[answer_id], count);
+            });
+          })
+        );
       },
     },
   },

@@ -17,12 +17,12 @@ export default {
     label: String,
     team: String,
     total: Number,
-    highest: Number,
     score: Number,
     highlighted: Boolean,
   },
   computed: {
     percentage() {
+      if (!this.score) return 0;
       return (this.score / this.total) * 100;
     },
     percentageLabel() {
@@ -30,7 +30,7 @@ export default {
     },
     styles() {
       return {
-        width: `${this.percentage}%`,
+        width: `${this.total > 0 ? this.percentage : 100}%`,
       };
     },
     teamClass() {
@@ -54,13 +54,13 @@ export default {
   background: #95c93d;
 }
 
-.team-red .bar {
+.team-pink .bar {
   border-color: #d31c67;
 }
-.team-red .percentage-label {
+.team-pink .percentage-label {
   color: #d31c67;
 }
-.team-red.highlighted .bar {
+.team-pink.highlighted .bar {
   background: #d31c67;
 }
 
