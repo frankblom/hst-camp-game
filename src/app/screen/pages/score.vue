@@ -4,8 +4,9 @@
     <TransitionGroup class="scorebox" tag="div" name="slide-down">
       <ScoreLine
         v-for="(score, index) in result"
-        :score="score.answers"
+        :answers="score.answers"
         :team="score.team"
+        :total="score.total"
         :key="index"
         :style="{ '--i': index }"
         :highlighted="correct"
@@ -57,16 +58,19 @@ export default {
       if (this.isLoading || !this.correct) return [];
       // order the teams so the one with the most correct answers is on top
       return teams.sort((a, b) => {
-        if (
-          this.responses[a].answers[this.correct].count >
-          this.responses[b].answers[this.correct].count
-        )
-          return -1;
-        if (
-          this.responses[a].answers[this.correct].count <
-          this.responses[b].answers[this.correct].count
-        )
-          return 1;
+        const per_a =
+          this.responses[a].total > 0
+            ? this.responses[a].answers[this.correct].count /
+              this.responses[a].total
+            : 0;
+        const per_b =
+          this.responses[b].total > 0
+            ? this.responses[b].answers[this.correct].count /
+              this.responses[b].total
+            : 0;
+
+        if (per_a > per_b) return -1;
+        if (per_a < per_b) return 1;
         return 0;
       });
     },
@@ -96,8 +100,16 @@ export default {
         this.$set(this.responses, team, {
           team,
           answers: {},
+          total: count,
         });
+      } else {
+        this.$set(
+          this.responses[team],
+          "total",
+          this.responses[team].total + count
+        );
       }
+
       this.$set(this.responses[team].answers, option.label, {
         label: option.label,
         count,

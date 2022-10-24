@@ -5,14 +5,15 @@
       @click="$emit('open', question.id)"
     >
       <div class="header text-2xl leading-loose">
-        <span class="text-gray-400">{{ title }}</span>
-        <b class="ml-2">{{ question.number }}</b>
+        <span class="text-gray-400">{{ question.title }}</span>
       </div>
     </div>
     <div v-if="opened" class="w-full">
-      <div class="w-full text-center q-text px-12">{{ $t(questionKey) }}</div>
+      <div v-if="isQuestion" class="w-full text-center q-text px-12">
+        {{ $t(questionKey) }}
+      </div>
       <Stepper :question="question" :step="question.step" />
-      <div class="w-full py-10">Score</div>
+      <ScoreBlock v-if="isQuestion" :question="question" />
       <div class="w-full flex p-3 justify-between">
         <div class="flex space-x-2">
           <Button class="mr-auto" size="small" @click="clear">Clear</Button>
@@ -31,30 +32,32 @@
 <script>
 import { db } from "@/app/admin/db.js";
 import Stepper from "./Stepper.vue";
+import ScoreBlock from "./ScoreBlock.vue";
 import {
   getPrevStepForQuestion,
   getNextStepForQuestion,
 } from "@/app/admin/functions.js";
 import { PAGE_FOR_STEPS, PAGE_HOME } from "@/const/pages.js";
-import { NO_STEP } from "@/const/steps.js";
+import { NO_STEP, SHOW_ANSWERS_STEP } from "@/const/steps.js";
 
 export default {
-  components: { Stepper },
+  components: { Stepper, ScoreBlock },
   props: {
     question: Object,
     opened: Boolean,
     active: Boolean,
   },
   computed: {
+    isQuestion() {
+      return this.question.type === "pre" || this.question.type === "game";
+    },
     isPregame() {
       return this.question.type === "pre";
     },
     questionKey() {
       return this.isPregame ? "PG-text" : `${this.question.id}-text`;
     },
-    title() {
-      return this.isPregame ? "Pre Game Spørsmål" : "Spørsmål";
-    },
+
     bgClass() {
       if (this.active) return "border border-red-400";
       if (this.opened) return "bg-gray-900";
@@ -87,6 +90,10 @@ export default {
         page: PAGE_FOR_STEPS[step],
         question: question,
       });
+
+      if (step === SHOW_ANSWERS_STEP) {
+        this.onShowAnswers(question);
+      }
     },
     next() {
       if (this.nextStep === false) {
@@ -111,9 +118,12 @@ export default {
         .doc(this.question.id)
         .update({ step: NO_STEP });
     },
-    startClock() {},
-    setScore() {},
-    setPenalty() {},
+    onShowAnswers(question) {
+      // run the kick script
+      console.log(question);
+
+      // run the apply score script
+    },
   },
 };
 </script>

@@ -58,6 +58,7 @@ export default {
     option: Object,
     selected: String,
     revealed: Boolean,
+    canPress: Boolean,
   },
   computed: {
     isCorrect() {
@@ -82,8 +83,12 @@ export default {
       };
     },
     bgClass() {
-      if (!this.hasSelected) return;
-      return this.isSelected ? "selected" : "opacity-50";
+      if (!this.canPress) return "opacity-50";
+
+      if (this.hasSelected) {
+        return this.isSelected ? "selected" : "opacity-50";
+      }
+      return "";
     },
     markerClass() {
       return {

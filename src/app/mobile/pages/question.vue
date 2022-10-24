@@ -16,13 +16,12 @@
               :option="option"
               :selected="selected"
               :revealed="reveal"
+              :canPress="canVote"
               @select="selectAnswer"
             />
           </div>
         </transition>
-        <div class="w-full flex-none text-center py-4">
-          <!-- <span class="text-gray-400">1 av 4</span> -->
-        </div>
+        <div class="w-full flex-none text-center py-4"></div>
       </div>
     </transition>
     <transition name="fade">
@@ -30,12 +29,10 @@
         <div v-if="isCorrect" class="text-white text-center w-full">
           <img class="w-32 h-32 mx-auto" src="@/assets/correct.png" />
           <h2 class="text-4xl py-4">{{ $t("answer-correct") }}</h2>
-          <span class="text-6xl font-bold">+74</span>
         </div>
         <div v-else class="text-white text-center w-full">
           <img class="w-32 h-32 mx-auto" src="@/assets/wrong.png" />
           <h2 class="text-4xl py-4">{{ $t("answer-wrong") }}</h2>
-          <span class="text-6xl font-bold">+0</span>
         </div>
       </div>
     </transition>
@@ -73,6 +70,9 @@ export default {
     showScore() {
       return this.question.step >= SCORE_STEP;
     },
+    canVote() {
+      return this.question.step == START_CLOCK_STEP;
+    },
     showOptions() {
       return this.question.step >= START_CLOCK_STEP;
     },
@@ -91,7 +91,8 @@ export default {
   },
   methods: {
     selectAnswer(option) {
-      if (this.selected !== null) return;
+      if (this.selected !== null || !this.canVote) return;
+
       this.selected = option.id;
 
       this.$emit("answer", {

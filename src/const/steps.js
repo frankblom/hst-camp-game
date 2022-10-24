@@ -41,3 +41,6 @@ export const GAME_STEPS = [
   APPLY_PENALTY_STEP,
   RESULT_STEP,
 ];
+
+export const CHALLANGE_STEPS = [NO_STEP, RESULT_STEP];
+export const SCORE_STEPS = [NO_STEP, RESULT_STEP];

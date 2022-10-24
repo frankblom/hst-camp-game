@@ -5,9 +5,9 @@
       :key="label"
       :label="label"
       :team="team"
-      :total="totalAnswers"
+      :total="total"
       :highlighted="highlighted == label"
-      :score="score[label].count"
+      :score="answers[label].count"
     />
   </div>
 </template>
@@ -17,14 +17,12 @@ import ScoreBlock from "./ScoreBlock.vue";
 export default {
   components: { ScoreBlock },
   props: {
-    score: Object,
+    answers: Object,
     team: String,
+    total: Number,
     highlighted: String,
   },
   computed: {
-    totalAnswers() {
-      return Object.values(this.score).reduce((acc, s) => acc + s.count, 0);
-    },
     labels() {
       return ["A", "B", "C", "D"];
     },

@@ -13,9 +13,6 @@ export default {
     question: Object,
   },
   computed: {
-    isPreGame() {
-      return this.question.type == "pre";
-    },
     steps() {
       return getSteps(this.question);
     },

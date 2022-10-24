@@ -118,7 +118,6 @@ export default {
         });
     },
   },
-
   firestore: {
     game: db.collection("games").doc("game"),
     questions: db.collection("questions").orderBy("order"),
