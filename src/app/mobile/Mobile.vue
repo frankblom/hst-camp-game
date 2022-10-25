@@ -43,7 +43,7 @@ import Loading from "./components/loading.vue";
 import Question from "./pages/question.vue";
 import Gameover from "./pages/gameover.vue";
 import { db } from "./db";
-
+// import jwt_decode from 'jwt-decode';
 import { PAGE_QUESTION, PAGE_SCORE } from "@/const/pages.js";
 
 export default {

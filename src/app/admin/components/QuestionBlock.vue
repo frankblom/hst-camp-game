@@ -13,50 +13,52 @@
         {{ $t(questionKey) }}
       </div>
       <Stepper :question="question" :step="question.step" />
-      <div class="flex w-full justify-center">
-        <AnswersBlock v-if="isQuestion" :question="question" />
-        <PenaltyBlock
-          v-if="hasPenalty"
-          :penalties="penalties"
-          :question="question"
-        />
-        <PointsBlock v-if="hasPoints" :points="points" :question="question" />
-      </div>
+      <QuestionResults
+        :question="question"
+        :step="question.step"
+        :penalties="penalties"
+        :points="points"
+        @applyPenalty="onApplyPenalty"
+      />
 
-      <div class="w-full flex p-3 justify-between">
+      <div
+        class="w-full flex p-3 justify-between border-t border-gray-800 mt-12"
+      >
         <div class="flex space-x-2">
           <Button class="mr-auto" size="small" @click="clear">Clear</Button>
           <Button class="mr-auto" v-if="showPrevious" size="small" @click="prev"
             >Prev</Button
           >
         </div>
-        <Button class="ml-auto" size="small" @click="next">{{
-          nextText
-        }}</Button>
+        <Button
+          :disabled="!canGoToNext"
+          class="ml-auto"
+          size="small"
+          @click="next"
+          >{{ nextText }}</Button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { db } from "@/app/admin/db.js";
+import { db, functions } from "@/app/admin/db.js";
+import { httpsCallable } from "firebase/functions";
 import Stepper from "./Stepper.vue";
-import AnswersBlock from "./AnswersBlock.vue";
-import PointsBlock from "./PointsBlock.vue";
-import PenaltyBlock from "./PenaltyBlock.vue";
+
+import QuestionResults from "./QuestionResults.vue";
 import {
   getPrevStepForQuestion,
   getNextStepForQuestion,
 } from "@/app/admin/functions.js";
 import { PAGE_FOR_STEPS, PAGE_HOME } from "@/const/pages.js";
-import { NO_STEP, SHOW_ANSWERS_STEP } from "@/const/steps.js";
+import { NO_STEP, APPLY_PENALTY_STEP, SCORE_STEP } from "@/const/steps.js";
 
 export default {
   components: {
     Stepper,
-    AnswersBlock,
-    PointsBlock,
-    PenaltyBlock,
+    QuestionResults,
   },
   props: {
     question: Object,
@@ -85,7 +87,6 @@ export default {
     questionKey() {
       return this.isPregame ? "PG-text" : `${this.question.id}-text`;
     },
-
     bgClass() {
       if (this.active) return "border border-red-400";
       if (this.opened) return "bg-gray-900";
@@ -108,6 +109,13 @@ export default {
     prevStep() {
       return getPrevStepForQuestion(this.question);
     },
+    canGoToNext() {
+      if (!this.hasPoints || !this.hasPenalty || !this.question) return true;
+      if (this.nextStep != SCORE_STEP) return true;
+      if (this.penalties.length < 4) return false;
+      if (this.points.length < 4) return false;
+      return true;
+    },
   },
   methods: {
     setStep(step) {
@@ -119,11 +127,13 @@ export default {
         question: question,
       });
 
-      if (step === SHOW_ANSWERS_STEP) {
-        this.onShowAnswers(question);
+      if (step == APPLY_PENALTY_STEP) {
+        this.onApplyPenalty();
       }
     },
     next() {
+      if (!this.canGoToNext) return;
+
       if (this.nextStep === false) {
         this.close();
       } else {
@@ -142,15 +152,13 @@ export default {
       });
     },
     clear() {
-      db.collection("questions")
-        .doc(this.question.id)
-        .update({ step: NO_STEP });
+      this.setStep(NO_STEP);
     },
-    onShowAnswers(question) {
-      // run the kick script
-      console.log(question);
-
-      // run the apply score script
+    onApplyPenalty() {
+      const executePenalty = httpsCallable(functions, "executePenalty");
+      executePenalty({ question_id: this.question.id }).then((result) => {
+        console.log(result);
+      });
     },
   },
 };

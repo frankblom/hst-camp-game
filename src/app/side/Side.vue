@@ -4,7 +4,7 @@
       :team="teamByKey('orange')"
       key="orange"
       :count="playerCount.orange"
-      :kicked="kicked.orange"
+      :penalties="penaltiesForTeam('orange')"
       :question="currentQuestion"
     />
     <Clock :game="game" @stop="stopClock" />
@@ -12,14 +12,14 @@
       :team="teamByKey('green')"
       key="green"
       :count="playerCount.green"
-      :kicked="kicked.green"
+      :penalties="penaltiesForTeam('green')"
       :question="currentQuestion"
     />
     <TeamBar
       :team="teamByKey('pink')"
       key="pink"
       :count="playerCount.pink"
-      :kicked="kicked.pink"
+      :penalties="penaltiesForTeam('pink')"
       :question="currentQuestion"
     />
     <Clock :game="game" />
@@ -27,7 +27,7 @@
       :team="teamByKey('blue')"
       key="blue"
       :count="playerCount.blue"
-      :kicked="kicked.blue"
+      :penalties="penaltiesForTeam('blue')"
       :question="currentQuestion"
     />
   </div>
@@ -53,7 +53,7 @@ export default {
     return {
       teams: [],
       game: null,
-      kicks: [],
+      penalties: [],
       playerCount: {
         blue: 0,
         pink: 0,
@@ -66,14 +66,7 @@ export default {
     loaded() {
       return this.teams.length > 0 && this.game != null;
     },
-    kicked() {
-      return {
-        blue: this.kicks.filter((kick) => kick.team_id === "blue"),
-        pink: this.kicks.filter((kick) => kick.team_id === "pink"),
-        green: this.kicks.filter((kick) => kick.team_id === "green"),
-        orange: this.kicks.filter((kick) => kick.team_id === "orange"),
-      };
-    },
+
     currentQuestion() {
       if (typeof this?.game?.question == "object") {
         return this.game.question;
@@ -82,6 +75,9 @@ export default {
     },
   },
   methods: {
+    penaltiesForTeam(team) {
+      return this.penalties.filter((p) => p.team_id === team);
+    },
     stopClock() {
       const QID = this?.game?.question?.id;
       if (!QID) return;
@@ -116,7 +112,7 @@ export default {
   firestore: {
     teams: db.collection("teams").orderBy("index"),
     game: db.collection("games").doc("game"),
-    kicks: db.collection("kicks"),
+    penalties: db.collection("penalties"),
   },
 };
 </script>

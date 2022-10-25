@@ -1,5 +1,6 @@
 <template>
   <button
+    :disabled="disabled"
     class="border-2 rounded"
     :class="[bgClass, padding, textSize]"
     @click="$emit('click')"
@@ -20,6 +21,7 @@ export default {
       type: String,
       default: "large",
     },
+    disabled: Boolean,
     status: String,
   },
   computed: {
@@ -27,7 +29,10 @@ export default {
       return {
         "border-blue-500 text-blue-500 hover:bg-blue-300 hover:border-blue-300 hover:text-black":
           this.variant === "primary",
+        "border-red-500 text-red-500 hover:bg-red-300 hover:border-red-300 hover:text-black":
+          this.variant === "danger",
         "border-red-500 bg-red-500 text-black": this.variant === "active",
+        "opacity-25": this.disabled,
       };
     },
 

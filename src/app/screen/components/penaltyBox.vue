@@ -7,7 +7,7 @@
           v-show="reveal"
         >
           <span>-</span>
-          <span class="penalty-count-number">{{ kickedCount }}</span>
+          <span class="penalty-count-number">{{ kickedCount }} %</span>
           <svg
             width="22"
             height="35"
@@ -46,7 +46,7 @@ export default {
   components: { Team },
   props: {
     team: Object,
-    kicked: Object,
+    penalty: Object,
     reveal: Boolean,
   },
   computed: {
@@ -54,8 +54,8 @@ export default {
       return `text-team-${this.team.name}`;
     },
     kickedCount() {
-      if (!this.kicked) return 0;
-      return this.kicked.count;
+      if (!this.penalty) return 0;
+      return this.penalty.percentage;
     },
   },
 };

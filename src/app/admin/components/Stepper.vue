@@ -1,6 +1,11 @@
 <template>
-  <div class="w-full flex justify-center mt-10">
-    <Step v-for="(step, index) in steps" :key="index" :step="step" />
+  <div class="w-full flex justify-center mb-10 mt-16">
+    <Step
+      v-for="(step, index) in steps"
+      :key="index"
+      :index="index"
+      :step="step"
+    />
   </div>
 </template>
 

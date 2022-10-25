@@ -16,7 +16,7 @@
       <Penalty
         :teams="teamsList"
         :game="game"
-        :kicks="kicks"
+        :penalties="penalties"
         v-if="showPenalty"
       />
     </transition>
@@ -55,7 +55,7 @@ export default {
     return {
       game: null,
       teams: null,
-      kicks: [],
+      penalties: [],
       points: [],
     };
   },
@@ -109,7 +109,7 @@ export default {
           ...t,
           points: this.points
             .filter((p) => p.team_id == t.id)
-            .reduce((acc, item) => acc + item.count, 0),
+            .reduce((acc, item) => acc + Number(item.count), 0),
         }))
         .sort((a, b) => {
           if (a.points > b.points) return -1;
@@ -122,7 +122,7 @@ export default {
     game: db.collection("games").doc("game"),
     questions: db.collection("questions").orderBy("order"),
     teams: db.collection("teams").orderBy("index"),
-    kicks: db.collection("kicks"),
+    penalties: db.collection("penalties"),
     points: db.collection("points"),
   },
 };

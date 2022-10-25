@@ -10,6 +10,7 @@ export const RESULT_STEP = 30;
 export const WINNER_STEP = 40;
 
 export const STEP_LABELS = {
+  [NO_STEP]: "Vis",
   [SHOW_QUESTION_STEP]: "Vis",
   [START_CLOCK_STEP]: "Start Nedtelling",
   [STOP_CLOCK_STEP]: "Nedtelling ferdig",

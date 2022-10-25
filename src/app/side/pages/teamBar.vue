@@ -6,9 +6,9 @@
       <transition name="fade">
         <div
           class="text-center flex items-center justify-center penalty"
-          v-if="penatlyCount"
+          v-if="totalPenaltyCount"
         >
-          <span class="penalty-count">- {{ penatlyCount }}</span>
+          <span class="penalty-count">- {{ totalPenaltyCount }}</span>
           <svg
             class="ml-4"
             width="22"
@@ -41,7 +41,7 @@ export default {
   props: {
     team: Object,
     count: Number,
-    kicked: Array,
+    penalties: Array,
     question: Object,
   },
   computed: {
@@ -50,30 +50,31 @@ export default {
     },
     playerCount() {
       if (!this.count) return 0;
-      if (this.kickedCount > this.count) return 0;
-      return this.count - this.kickedCount;
+      if (this.penaltyCount > this.count) return 0;
+      return this.count - this.penaltyCount;
     },
     currentQuestionId() {
       return this?.question?.id;
     },
-    kickedCount() {
+    penaltyCount() {
       return (
-        this.kicked
+        this.penalties
           .filter((k) => k.question_id != this.currentQuestionId)
-          .reduce((count, kick) => count + kick.count, 0) + this.penatlyCount
+          .reduce((count, p) => count + (p.count ? p.count : 0), 0) +
+        this.totalPenaltyCount
       );
     },
-    penatlyCount() {
+    totalPenaltyCount() {
       if (!this.currentQuestionId) return 0;
 
       if (this.question.step < APPLY_PENALTY_STEP) {
         return 0;
       }
 
-      const kicked = this.kicked.find(
+      const penalties = this.penalties.find(
         (k) => k.question_id === this.question.id
       );
-      return kicked ? kicked.count : 0;
+      return penalties ? (penalties.total ? penalties.count : 0) : 0;
     },
   },
 };

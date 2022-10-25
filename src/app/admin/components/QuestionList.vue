@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white w-full overflow-y-auto pb-12">
+  <div class="text-white w-full overflow-y-auto pb-12 md:px-10">
     <QuestionBlock
       v-for="q in questions"
       :question="q"
@@ -7,6 +7,7 @@
       @open="select"
       :opened="q.id === selected"
       :points="pointsForQuestion(q.id)"
+      :penalties="penaltiesForQuestion(q.id)"
       :active="activeQuestion === q.id"
     />
   </div>
@@ -20,10 +21,11 @@ export default {
     questions: Array,
     game: Object,
     points: Array,
+    penalties: Array,
   },
   data() {
     return {
-      selected: "G-3",
+      selected: "",
     };
   },
   computed: {
@@ -41,6 +43,9 @@ export default {
     },
     pointsForQuestion(id) {
       return this.points.filter((p) => p.question_id === id);
+    },
+    penaltiesForQuestion(id) {
+      return this.penalties.filter((p) => p.question_id === id);
     },
   },
 };

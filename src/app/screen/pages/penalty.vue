@@ -11,7 +11,7 @@
         :team="team"
         v-for="(team, index) in teams"
         :key="index"
-        :kicked="kickedForTeam(team)"
+        :penalty="penaltiesForTeam(team)"
         :reveal="reveal"
         :style="{ '--i': index }"
       />
@@ -28,7 +28,7 @@ export default {
   props: {
     teams: Array,
     game: Object,
-    kicks: Array,
+    penalties: Array,
   },
   computed: {
     currentQuestion() {
@@ -45,10 +45,9 @@ export default {
     },
   },
   methods: {
-    kickedForTeam(team) {
-      return this.kicks.find(
-        (kick) =>
-          kick.team_id === team.id && kick.question_id == this.currentQuestion
+    penaltiesForTeam(team) {
+      return this.penalties.find(
+        (p) => p.team_id === team.id && p.question_id == this.currentQuestion
       );
     },
   },
