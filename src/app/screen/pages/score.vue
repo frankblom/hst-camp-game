@@ -125,7 +125,6 @@ export default {
       immediate: true,
       async handler() {
         if (!this.question) {
-          console.log("TEST");
           return;
         }
         this.clear();

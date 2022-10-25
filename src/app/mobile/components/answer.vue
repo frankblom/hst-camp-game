@@ -83,11 +83,9 @@ export default {
       };
     },
     bgClass() {
+      if (this.isSelected) return "selected";
+      if (this.hasSelected) return "opacity-50";
       if (!this.canPress) return "opacity-50";
-
-      if (this.hasSelected) {
-        return this.isSelected ? "selected" : "opacity-50";
-      }
       return "";
     },
     markerClass() {

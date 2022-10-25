@@ -13,7 +13,16 @@
         {{ $t(questionKey) }}
       </div>
       <Stepper :question="question" :step="question.step" />
-      <ScoreBlock v-if="isQuestion" :question="question" />
+      <div class="flex w-full justify-center">
+        <AnswersBlock v-if="isQuestion" :question="question" />
+        <PenaltyBlock
+          v-if="hasPenalty"
+          :penalties="penalties"
+          :question="question"
+        />
+        <PointsBlock v-if="hasPoints" :points="points" :question="question" />
+      </div>
+
       <div class="w-full flex p-3 justify-between">
         <div class="flex space-x-2">
           <Button class="mr-auto" size="small" @click="clear">Clear</Button>
@@ -32,7 +41,9 @@
 <script>
 import { db } from "@/app/admin/db.js";
 import Stepper from "./Stepper.vue";
-import ScoreBlock from "./ScoreBlock.vue";
+import AnswersBlock from "./AnswersBlock.vue";
+import PointsBlock from "./PointsBlock.vue";
+import PenaltyBlock from "./PenaltyBlock.vue";
 import {
   getPrevStepForQuestion,
   getNextStepForQuestion,
@@ -41,15 +52,32 @@ import { PAGE_FOR_STEPS, PAGE_HOME } from "@/const/pages.js";
 import { NO_STEP, SHOW_ANSWERS_STEP } from "@/const/steps.js";
 
 export default {
-  components: { Stepper, ScoreBlock },
+  components: {
+    Stepper,
+    AnswersBlock,
+    PointsBlock,
+    PenaltyBlock,
+  },
   props: {
     question: Object,
     opened: Boolean,
     active: Boolean,
+    points: Array,
+    penalties: Array,
   },
   computed: {
     isQuestion() {
       return this.question.type === "pre" || this.question.type === "game";
+    },
+    hasPoints() {
+      return (
+        this.question.type === "challange" ||
+        this.question.type === "game" ||
+        this.question.type === "score"
+      );
+    },
+    hasPenalty() {
+      return this.question.type === "game";
     },
     isPregame() {
       return this.question.type === "pre";

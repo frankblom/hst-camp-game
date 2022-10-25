@@ -1,6 +1,12 @@
 <template>
   <div id="app" class="w-full h-screen flex">
-    <QuestionList class="w-full" :questions="questions" :game="game" />
+    <QuestionList
+      class="w-full"
+      :questions="questions"
+      :game="game"
+      :points="points"
+      :penalties="penalties"
+    />
   </div>
 </template>
 
@@ -14,6 +20,8 @@ export default {
     return {
       game: {},
       questions: [],
+      points: [],
+      penalties: [],
     };
   },
   methods: {
@@ -24,6 +32,8 @@ export default {
   firestore: {
     game: db.collection("games").doc("game"),
     questions: db.collection("questions").orderBy("order"),
+    points: db.collection("points"),
+    penalties: db.collection("penalties"),
   },
 };
 </script>

@@ -6,6 +6,7 @@
       :key="q.id"
       @open="select"
       :opened="q.id === selected"
+      :points="pointsForQuestion(q.id)"
       :active="activeQuestion === q.id"
     />
   </div>
@@ -18,6 +19,7 @@ export default {
   props: {
     questions: Array,
     game: Object,
+    points: Array,
   },
   data() {
     return {
@@ -36,6 +38,9 @@ export default {
       } else {
         this.selected = id;
       }
+    },
+    pointsForQuestion(id) {
+      return this.points.filter((p) => p.question_id === id);
     },
   },
 };

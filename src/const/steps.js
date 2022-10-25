@@ -10,15 +10,15 @@ export const RESULT_STEP = 30;
 export const WINNER_STEP = 40;
 
 export const STEP_LABELS = {
-  [SHOW_QUESTION_STEP]: "Show",
-  [START_CLOCK_STEP]: "Start clock",
-  [STOP_CLOCK_STEP]: "Stop clock",
-  [SHOW_ANSWERS_STEP]: "Show answers",
-  [SCORE_STEP]: "Show Score",
-  [PENALTY_STEP]: "Show Straff",
-  [APPLY_PENALTY_STEP]: "Apply Straff",
-  [RESULT_STEP]: "Show Results",
-  [WINNER_STEP]: "Show Winner",
+  [SHOW_QUESTION_STEP]: "Vis",
+  [START_CLOCK_STEP]: "Start Nedtelling",
+  [STOP_CLOCK_STEP]: "Nedtelling ferdig",
+  [SHOW_ANSWERS_STEP]: "Vis riktig svar",
+  [SCORE_STEP]: "Vis Resultat",
+  [PENALTY_STEP]: "Vis Straff",
+  [APPLY_PENALTY_STEP]: "Set Straff",
+  [RESULT_STEP]: "Vis total resutlat",
+  [WINNER_STEP]: "Vis Winner",
 };
 
 export const PRE_GAME_STEPS = [
@@ -27,8 +27,6 @@ export const PRE_GAME_STEPS = [
   STOP_CLOCK_STEP,
   SHOW_ANSWERS_STEP,
   SCORE_STEP,
-  RESULT_STEP,
-  WINNER_STEP,
 ];
 
 export const GAME_STEPS = [
