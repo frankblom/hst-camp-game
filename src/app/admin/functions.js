@@ -6,7 +6,7 @@ import {
   SCORE_STEPS,
 } from "@/const/steps.js";
 
-const stepsForQuestion = (question) => {
+export const stepsForQuestion = (question) => {
   switch (question.type) {
     case "pre":
       return PRE_GAME_STEPS;

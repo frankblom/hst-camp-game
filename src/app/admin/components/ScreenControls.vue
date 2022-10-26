@@ -1,16 +1,14 @@
 <template>
-  <div class="w-full p-4">
-    <label class="text-white text-xl">LED SCREEN</label>
-    <div class="w-full flex flex-wrap mt-4">
-      <Button
-        class="mr-2 mb-2 capitalize"
-        v-for="p in pages"
-        :key="p"
-        :variant="btnVariantFor(p)"
-        @click="$emit('setPage', p)"
-        >{{ p }}</Button
-      >
-    </div>
+  <div class="w-full py-4 mb-4 md:px-10 item-center border-b">
+    <span class="text-white mr-4 text-3xl">Pages</span>
+    <Button
+      class="mr-2 capitalize"
+      v-for="p in pages"
+      :key="p"
+      :variant="btnVariantFor(p)"
+      @click="$emit('setPage', p)"
+      >{{ p }}</Button
+    >
   </div>
 </template>
 

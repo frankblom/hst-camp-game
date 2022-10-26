@@ -1,11 +1,19 @@
 <template>
-  <div class="border-b border-gray-800 w-full" :class="bgClass">
+  <div class="w-full" :class="bgClass">
     <div
       class="text-white w-full py-2 px-3 cursor-pointer hover:bg-gray-900"
       @click="$emit('open', question.id)"
     >
-      <div class="header text-2xl leading-loose">
-        <span class="text-gray-400">{{ question.title }}</span>
+      <div class="w-full flex items-center">
+        <h2
+          class="text-3xl leading-loose"
+          :class="opened ? 'text-white' : 'text-gray-400'"
+        >
+          {{ question.title }}
+        </h2>
+        <span class="ml-auto font-bold text-lg" :class="stepClass"
+          >{{ stepIndex }} / {{ stepList.length }}</span
+        >
       </div>
     </div>
     <div v-if="opened" class="w-full">
@@ -51,6 +59,7 @@ import QuestionResults from "./QuestionResults.vue";
 import {
   getPrevStepForQuestion,
   getNextStepForQuestion,
+  stepsForQuestion,
 } from "@/app/admin/functions.js";
 import { PAGE_FOR_STEPS, PAGE_HOME } from "@/const/pages.js";
 import { NO_STEP, APPLY_PENALTY_STEP, SCORE_STEP } from "@/const/steps.js";
@@ -89,7 +98,7 @@ export default {
     },
     bgClass() {
       if (this.active) return "border border-red-400";
-      if (this.opened) return "bg-gray-900";
+      if (this.opened) return "border border-gray-500 bg-gray-900";
       return "";
     },
     nextText() {
@@ -115,6 +124,19 @@ export default {
       if (this.penalties.length < 4) return false;
       if (this.points.length < 4) return false;
       return true;
+    },
+    stepList() {
+      return stepsForQuestion(this.question);
+    },
+    stepIndex() {
+      return this.question.step
+        ? this.stepList.indexOf(this.question.step) + 1
+        : 0;
+    },
+    stepClass() {
+      if (this.stepList.length === this.stepIndex) return "text-green-400";
+      if (this.stepIndex > 0) return "text-yellow-500";
+      return "text-gray-500";
     },
   },
   methods: {
@@ -150,6 +172,7 @@ export default {
         page: PAGE_HOME,
         question: null,
       });
+      this.$emit("open", "next");
     },
     clear() {
       this.setStep(NO_STEP);

@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="max-w-3xl mx-auto relative overflow-hidden">
+    <Login v-if="showLogin" @login="() => login(1004362)" />
     <div
       v-if="isLoading"
       class="flex items-center flex-col h-screen text-gray-200 text-3xl justify-center"
@@ -8,13 +9,7 @@
       <span class="mt-12">Loading</span>
     </div>
     <div v-else class="relative h-screen">
-      <Login v-if="!isLoggedIn" @login="login" />
-      <Header
-        v-if="isLoggedIn"
-        :profile="player"
-        @click="triggerProfile"
-        :show="showProfile"
-      />
+      <Header :profile="player" @click="triggerProfile" :show="showProfile" />
       <Profile v-if="showProfile" :profile="player" @logout="logout" />
       <transition name="fade">
         <Waiting v-if="isWaiting" />
@@ -43,7 +38,7 @@ import Loading from "./components/loading.vue";
 import Question from "./pages/question.vue";
 import Gameover from "./pages/gameover.vue";
 import { db } from "./db";
-// import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 import { PAGE_QUESTION, PAGE_SCORE } from "@/const/pages.js";
 
 export default {
@@ -53,6 +48,7 @@ export default {
       player: null,
       game: null,
       showProfile: false,
+      loggin_in_attemt: false,
       answers: [],
     };
   },
@@ -60,14 +56,14 @@ export default {
     isLoading() {
       return Boolean(this.game) === false;
     },
-    isLoggedIn() {
-      return Boolean(this.player);
+    showLogin() {
+      return Boolean(this.player) === false && this.loggin_in_attemt == false;
     },
     isKicked() {
       return false;
     },
     isPlaying() {
-      return this.isLoggedIn && !this.isKicked;
+      return !this.showLogin && !this.isLoading && !this.isKicked;
     },
     isWaiting() {
       if (!this.isPlaying) return false;
@@ -109,25 +105,63 @@ export default {
         team_id: this.player.team_id,
       });
     },
-    login() {
-      const id = 10547;
-      const key = `player-${id}`;
-      const player = db.collection("players").doc(key);
-      this.$bind("player", player);
-      player.update({ logged_in: true });
+    login(pmoid) {
+      const key = `player-${pmoid}`;
 
-      this.$bind(
-        "answers",
-        db.collection("answers").where("user_id", "==", key)
-      );
+      // check if exists
+      const ref = db.collection("players").doc(key);
+
+      ref.get().then((player) => {
+        if (!player.exists) {
+          alert("Beklager, kan ikke logge deg inn.");
+          return this.logout();
+        }
+
+        localStorage.setItem("player", pmoid);
+
+        if (!player.data().logged_in) {
+          ref.update({ logged_in: true });
+        }
+
+        this.$bind("player", ref);
+        this.$bind(
+          "answers",
+          db.collection("answers").where("user_id", "==", key)
+        );
+
+        this.$bind("game", db.collection("games").doc("game"));
+      });
     },
     logout() {
-      this.$unbind("player");
+      if (this.player) {
+        this.$unbind("player");
+      }
       this.showProfile = false;
+      this.loggin_in_attemt = false;
+      localStorage.removeItem("player");
     },
   },
-  firestore: {
-    game: db.collection("games").doc("game"),
+  mounted() {
+    const session_pmo_id = localStorage.getItem("player");
+
+    if (session_pmo_id) {
+      this.loggin_in_attemt = true;
+      console.log("Login attemtpt with session id");
+      return this.login(session_pmo_id);
+    }
+
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (!token) return;
+
+    this.loggin_in_attemt = true;
+
+    try {
+      const data = jwt_decode(token);
+      return this.login(data.person_id);
+    } catch (error) {
+      console.log(error);
+      return this.logout();
+    }
   },
 };
 </script>

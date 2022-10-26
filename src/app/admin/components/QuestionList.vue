@@ -1,5 +1,5 @@
 <template>
-  <div class="text-white w-full overflow-y-auto pb-12 md:px-10">
+  <div class="text-white w-full pb-12 md:px-10">
     <QuestionBlock
       v-for="q in questions"
       :question="q"
@@ -35,10 +35,27 @@ export default {
   },
   methods: {
     select(id) {
+      if (id == "next") {
+        return this.selectNext();
+      }
+
       if (this.selected === id) {
         this.selected = null;
       } else {
         this.selected = id;
+      }
+    },
+    selectNext() {
+      if (!this.selected) return;
+
+      const current_index = this.questions.findIndex(
+        (q) => q.id === this.selected
+      );
+      if (this.questions.length <= current_index + 1) {
+        this.select(null);
+      } else {
+        const next = this.questions[current_index + 1];
+        this.select(next.id);
       }
     },
     pointsForQuestion(id) {
