@@ -59,7 +59,7 @@ export default {
       return this.penalties.filter((p) => p.executed).length < 4;
     },
     canApplyKick() {
-      return this.penalties.length >= 4;
+      return this.penalties.filter((p) => p.count !== undefined).length >= 4;
     },
   },
   methods: {

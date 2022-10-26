@@ -2,13 +2,13 @@
   <div class="page text-white">
     <div class="text-xl text-center w-full" v-if="team">
       <h2 class="score text-white">{{ playerCount }}</h2>
-      <Team :name="team.name" class="team" />
+      <Team :name="team.name" class="team" :percentage="activePercentage" />
       <transition name="fade">
         <div
           class="text-center flex items-center justify-center penalty"
-          v-if="totalPenaltyCount"
+          v-if="penaltyForQuestionCount"
         >
-          <span class="penalty-count">- {{ totalPenaltyCount }}</span>
+          <span class="penalty-count">- {{ penaltyForQuestionCount }}</span>
           <svg
             class="ml-4"
             width="22"
@@ -56,15 +56,19 @@ export default {
     currentQuestionId() {
       return this?.question?.id;
     },
+    activePercentage() {
+      if (!this.penaltyCount) return 100;
+      return Math.round((this.playerCount / this.count) * 100);
+    },
     penaltyCount() {
       return (
         this.penalties
           .filter((k) => k.question_id != this.currentQuestionId)
           .reduce((count, p) => count + (p.count ? p.count : 0), 0) +
-        this.totalPenaltyCount
+        this.penaltyForQuestionCount
       );
     },
-    totalPenaltyCount() {
+    penaltyForQuestionCount() {
       if (!this.currentQuestionId) return 0;
 
       if (this.question.step < APPLY_PENALTY_STEP) {

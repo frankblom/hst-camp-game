@@ -88,8 +88,8 @@ export default {
     getCountForTeam(team_id) {
       const query_ = query(
         collection(db, "players"),
-        where("team_id", "==", team_id),
-        where("logged_in", "==", true)
+        where("team_id", "==", team_id)
+        // where("logged_in", "==", true)
       );
 
       getCountFromServer(query_).then((snapshot) => {
