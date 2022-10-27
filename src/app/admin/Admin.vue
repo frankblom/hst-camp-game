@@ -48,11 +48,11 @@ export default {
       db.collection("games").doc("game").update({ page });
     },
     reset() {
-      if (!confirm("ER DU SIKKERT!")) {
+      if (!confirm("ER DU SIKKER ????!")) {
         return false;
       }
 
-      if (!confirm("SISTE Mulighet for å cancelere!")) {
+      if (!confirm("SISTE sjanse til å avbryte!??")) {
         return false;
       }
 
