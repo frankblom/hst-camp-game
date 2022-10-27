@@ -1,7 +1,7 @@
 <template>
   <div id="header" class="absolute top-0 w-full flex justify-between px-4 pt-2">
     <div class="h-8 w-10 flex items-center" @click="$emit('click')">
-      <Team :name="profile.team_id" class="team-icon" />
+      <Team :name="profile?.team_id" class="team-icon" />
     </div>
     <div class="locale-changer flex">
       <select v-model="$i18n.locale" class="changer">

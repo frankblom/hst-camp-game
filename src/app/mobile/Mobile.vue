@@ -2,13 +2,13 @@
   <div id="app" class="max-w-3xl mx-auto relative overflow-hidden">
     <Login v-if="showLogin" @login="() => login(1004362)" />
     <div
-      v-if="isLoading"
+      v-if="isLoading && !showLogin"
       class="flex items-center flex-col h-screen text-gray-200 text-3xl justify-center"
     >
       <Loading />
       <span class="mt-12">Loading</span>
     </div>
-    <div v-else class="relative h-screen">
+    <div v-if="!isLoading && !showLogin" class="relative h-screen">
       <Header :profile="player" @click="triggerProfile" :show="showProfile" />
       <Profile v-if="showProfile" :profile="player" @logout="logout" />
       <transition name="fade">
@@ -87,6 +87,14 @@ export default {
       return this.game.question;
     },
   },
+  watch: {
+    player() {
+      if (!this.player) return;
+      if (this.player.logged_in === false) {
+        this.logout();
+      }
+    },
+  },
   methods: {
     triggerProfile() {
       if (this.showProfile) {
@@ -111,26 +119,32 @@ export default {
       // check if exists
       const ref = db.collection("players").doc(key);
 
-      ref.get().then((player) => {
-        if (!player.exists) {
-          alert("Beklager, kan ikke logge deg inn.");
-          return this.logout();
-        }
+      ref
+        .get()
+        .then((player) => {
+          if (!player.exists) {
+            alert("Beklager, kan ikke logge deg inn.");
+            return this.logout();
+          }
 
-        localStorage.setItem("player", pmoid);
+          localStorage.setItem("player", pmoid);
 
-        if (!player.data().logged_in) {
-          ref.update({ logged_in: true });
-        }
+          if (!player.data().logged_in) {
+            ref.update({ logged_in: true });
+          }
 
-        this.$bind("player", ref);
-        this.$bind(
-          "answers",
-          db.collection("answers").where("user_id", "==", key)
-        );
+          this.$bind("player", ref);
+          this.$bind(
+            "answers",
+            db.collection("answers").where("user_id", "==", key)
+          );
 
-        this.$bind("game", db.collection("games").doc("game"));
-      });
+          this.$bind("game", db.collection("games").doc("game"));
+          return true;
+        })
+        .catch(() => {
+          return false;
+        });
     },
     logout() {
       if (this.player) {
@@ -142,6 +156,16 @@ export default {
     },
   },
   mounted() {
+    const url = new URLSearchParams(window.location.search);
+    const test = url.get("test");
+
+    if (test) {
+      this.loggin_in_attemt = true;
+      this.login(`test-${test}`);
+      console.log(test);
+      return;
+    }
+
     const session_pmo_id = localStorage.getItem("player");
 
     if (session_pmo_id) {
@@ -150,7 +174,7 @@ export default {
       return this.login(session_pmo_id);
     }
 
-    const token = new URLSearchParams(window.location.search).get("token");
+    const token = url.get("token");
     if (!token) return;
 
     this.loggin_in_attemt = true;

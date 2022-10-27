@@ -11,8 +11,8 @@
     <div
       class="w-full text-center flex-1 flex flex-col justify-center items-center"
     >
-      <p class="text-xl mb-4">{{ $t(teamName) }}</p>
-      <Team :name="profile.team_id" />
+      <p class="text-xl mb-4">{{ $t(teamNametrans) }}</p>
+      <Team :name="profile?.team_id" />
     </div>
     <div class="w-full flex-none">
       <Button class="mt-auto mb-20 text-xl" @click="$emit('logout')">{{
@@ -30,8 +30,8 @@ export default {
     profile: Object,
   },
   computed: {
-    teamName() {
-      return `team-${this.profile.team_id}-participant`;
+    teamNametrans() {
+      return `team-${this.profile?.team_id}-participant`;
     },
   },
 };
