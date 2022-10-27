@@ -27,6 +27,9 @@
         v-if="showResults"
       />
     </transition>
+    <transition name="fade">
+      <Winner :team="leaderboard[0]" v-if="showWinner" />
+    </transition>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ import Score from "./pages/score.vue";
 import Question from "./pages/question.vue";
 import Penalty from "./pages/penalty.vue";
 import Results from "./pages/results.vue";
+import Winner from "./pages/winner.vue";
 
 import {
   PAGE_HOME,
@@ -50,7 +54,7 @@ import {
 
 export default {
   name: "Screen",
-  components: { Home, Puzzle, Score, Question, Penalty, Results },
+  components: { Home, Puzzle, Score, Question, Penalty, Results, Winner },
   data() {
     return {
       game: null,

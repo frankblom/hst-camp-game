@@ -148,14 +148,10 @@ export default {
       return this.question.type === "pre" || this.question.type === "game";
     },
     hasPoints() {
-      return (
-        this.question.type === "challange" ||
-        this.question.type === "game" ||
-        this.question.type === "score"
-      );
+      return this.question.with_points;
     },
     hasPenalty() {
-      return this.question.type === "game";
+      return this.question.with_penalty;
     },
     correct() {
       if (!this.question || !this.question.correct) return false;

@@ -32,6 +32,8 @@ export const PAGE_FOR_STEPS = {
   [WINNER_STEP]: PAGE_WINNER,
 };
 
+export const admin_pages = [PAGE_HOME, PAGE_RESULTS, PAGE_WINNER, PAGE_BLANK];
+
 export default [
   PAGE_HOME,
   PAGE_QUESTION,

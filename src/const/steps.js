@@ -43,3 +43,4 @@ export const GAME_STEPS = [
 
 export const CHALLANGE_STEPS = [NO_STEP, RESULT_STEP];
 export const SCORE_STEPS = [NO_STEP, RESULT_STEP];
+export const FINISH_STEPS = [NO_STEP, RESULT_STEP, WINNER_STEP];

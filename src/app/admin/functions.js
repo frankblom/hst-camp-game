@@ -4,6 +4,7 @@ import {
   STEP_LABELS,
   CHALLANGE_STEPS,
   SCORE_STEPS,
+  FINISH_STEPS,
 } from "@/const/steps.js";
 
 export const stepsForQuestion = (question) => {
@@ -14,9 +15,12 @@ export const stepsForQuestion = (question) => {
       return GAME_STEPS;
     case "score":
       return SCORE_STEPS;
+    case "finale":
+      return FINISH_STEPS;
     case "challange":
       return CHALLANGE_STEPS;
   }
+  return [];
 };
 
 export const getSteps = (question) =>

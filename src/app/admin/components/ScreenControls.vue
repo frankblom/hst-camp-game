@@ -13,14 +13,14 @@
 </template>
 
 <script>
-import pages from "@/const/pages.js";
+import { admin_pages } from "@/const/pages.js";
 export default {
   props: {
     page: String,
   },
   computed: {
     pages() {
-      return pages;
+      return admin_pages;
     },
   },
   methods: {
