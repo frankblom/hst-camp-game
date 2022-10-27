@@ -1,14 +1,16 @@
 <template>
-  <div id="app" v-if="loaded">
+  <div id="app">
     <TeamBar
+      v-if="loaded"
       :team="teamByKey('orange')"
       key="orange"
       :count="playerCount.orange"
       :penalties="penaltiesForTeam('orange')"
       :question="currentQuestion"
     />
-    <Clock :game="game" @stop="stopClock" />
+    <Clock v-if="loaded" :game="game" :remaining="remaining" />
     <TeamBar
+      v-if="loaded"
       :team="teamByKey('green')"
       key="green"
       :count="playerCount.green"
@@ -16,14 +18,16 @@
       :question="currentQuestion"
     />
     <TeamBar
+      v-if="loaded"
       :team="teamByKey('pink')"
       key="pink"
       :count="playerCount.pink"
       :penalties="penaltiesForTeam('pink')"
       :question="currentQuestion"
     />
-    <Clock :game="game" />
+    <Clock v-if="loaded" :game="game" :remaining="remaining" />
     <TeamBar
+      v-if="loaded"
       :team="teamByKey('blue')"
       key="blue"
       :count="playerCount.blue"
@@ -44,7 +48,11 @@ import {
 
 import Clock from "./pages/clock.vue";
 import TeamBar from "./pages/teamBar.vue";
-import { STOP_CLOCK_STEP } from "@/const/steps.js";
+import {
+  STOP_CLOCK_STEP,
+  START_CLOCK_STEP,
+  SHOW_QUESTION_STEP,
+} from "@/const/steps.js";
 
 export default {
   name: "Screen",
@@ -54,6 +62,8 @@ export default {
       teams: [],
       game: null,
       penalties: [],
+      interval: null,
+      remaining: this.game?.question?.time,
       playerCount: {
         blue: 0,
         pink: 0,
@@ -66,7 +76,9 @@ export default {
     loaded() {
       return this.teams.length > 0 && this.game != null;
     },
-
+    ticking() {
+      return this.game?.question?.step == START_CLOCK_STEP;
+    },
     currentQuestion() {
       if (typeof this?.game?.question == "object") {
         return this.game.question;
@@ -100,14 +112,66 @@ export default {
     teamByKey(key) {
       return this.teams.find((x) => x.name == key);
     },
+    fullscreen() {
+      const elem = document.getElementById("app");
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    },
+    tick() {
+      if (!this.ticking) return false;
+      if (this.remaining <= 0) {
+        this.stopClock();
+        return false;
+      }
+      this.$set(this, "remaining", this.remaining - 1);
+    },
+    setBG(bg) {
+      if (!bg) return;
+      const color = bg == "transparent" ? "rgba(0,0,0,0)" : `#${bg}`;
+      console.log(`Appling background color ${color}`);
+
+      document.getElementById("app").style.backgroundColor = color;
+      document.documentElement.style.backgroundColor = color;
+    },
   },
   mounted() {
+    this.setBG(new URLSearchParams(window.location.search).get("bg"));
+
     setInterval(() => {
       this.getCountForTeam("blue");
       this.getCountForTeam("pink");
       this.getCountForTeam("green");
       this.getCountForTeam("orange");
     }, 2000);
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "f") this.fullscreen();
+      },
+      false
+    );
+    this.interval = setInterval(this.tick, 1000);
+  },
+  destroyed() {
+    clearInterval(this.interval);
+  },
+  watch: {
+    game: {
+      deep: true,
+      handler(game) {
+        if (!game || !game.question) return;
+
+        if (game.question?.step === SHOW_QUESTION_STEP) {
+          this.$set(this, "remaining", game.question.time);
+        }
+      },
+    },
   },
   firestore: {
     teams: db.collection("teams").orderBy("index"),

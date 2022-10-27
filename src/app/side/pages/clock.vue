@@ -19,19 +19,13 @@
 
 <script>
 import { PAGE_QUESTION } from "@/const/pages.js";
-import { START_CLOCK_STEP, SHOW_QUESTION_STEP } from "@/const/steps.js";
 
 import Second from "../components/second.vue";
 export default {
   components: { Second },
   props: {
     game: Object,
-  },
-  data() {
-    return {
-      remaining: this.game?.question?.time,
-      interval: null,
-    };
+    remaining: Number,
   },
   computed: {
     position() {
@@ -39,9 +33,6 @@ export default {
       return {
         transform: `translateY(-${count}px)`,
       };
-    },
-    ticking() {
-      return this.game?.question?.step == START_CLOCK_STEP;
     },
     totalSeconds() {
       return this.game.question.time;
@@ -58,35 +49,6 @@ export default {
       if (typeof this.game.question != "object") return null;
 
       return this.game.question;
-    },
-  },
-  methods: {
-    tick() {
-      if (!this.ticking) return false;
-      if (this.remaining <= 0) {
-        this.$emit("stop");
-        return false;
-      }
-      this.$set(this, "remaining", this.remaining - 1);
-    },
-    stopClock() {},
-  },
-  mounted() {
-    this.interval = setInterval(this.tick, 1000);
-  },
-  destroyed() {
-    clearInterval(this.interval);
-  },
-  watch: {
-    game: {
-      deep: true,
-      handler(game) {
-        if (!game || !game.question) return;
-
-        if (game.question?.step === SHOW_QUESTION_STEP) {
-          this.$set(this, "remaining", game.question.time);
-        }
-      },
     },
   },
 };

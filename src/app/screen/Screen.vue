@@ -118,6 +118,36 @@ export default {
         });
     },
   },
+  methods: {
+    fullscreen() {
+      const elem = document.getElementById("app");
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    },
+    setBG(bg) {
+      if (!bg) return;
+      const color = bg == "transparent" ? "rgba(0,0,0,0)" : `#${bg}`;
+      console.log(`Appling background color ${color}`);
+
+      document.getElementById("app").style.backgroundColor = color;
+      document.documentElement.style.backgroundColor = color;
+    },
+  },
+  mounted() {
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        if (event.key === "f") this.fullscreen();
+      },
+      false
+    );
+    this.setBG(new URLSearchParams(window.location.search).get("bg"));
+  },
   firestore: {
     game: db.collection("games").doc("game"),
     questions: db.collection("questions").orderBy("order"),
