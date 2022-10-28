@@ -4,6 +4,7 @@ export const PAGE_PENALTY = "penalty";
 export const PAGE_SCORE = "score";
 export const PAGE_RESULTS = "results";
 export const PAGE_WINNER = "winner";
+export const PAGE_PRICE = "price";
 export const PAGE_BLANK = "blank";
 
 import {
@@ -17,6 +18,7 @@ import {
   APPLY_PENALTY_STEP,
   RESULT_STEP,
   WINNER_STEP,
+  PRICES_STEP,
 } from "@/const/steps.js";
 
 export const PAGE_FOR_STEPS = {
@@ -30,6 +32,7 @@ export const PAGE_FOR_STEPS = {
   [APPLY_PENALTY_STEP]: PAGE_PENALTY,
   [RESULT_STEP]: PAGE_RESULTS,
   [WINNER_STEP]: PAGE_WINNER,
+  [PRICES_STEP]: PAGE_PRICE,
 };
 
 export const admin_pages = [PAGE_HOME, PAGE_RESULTS, PAGE_WINNER, PAGE_BLANK];

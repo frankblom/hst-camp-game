@@ -30,6 +30,9 @@
     <transition name="fade">
       <Winner :team="leaderboard[0]" v-if="showWinner" />
     </transition>
+    <transition name="fade">
+      <Price :team="leaderboard[0]" v-if="showPrice" />
+    </transition>
   </div>
 </template>
 
@@ -42,6 +45,7 @@ import Question from "./pages/question.vue";
 import Penalty from "./pages/penalty.vue";
 import Results from "./pages/results.vue";
 import Winner from "./pages/winner.vue";
+import Price from "./pages/price.vue";
 
 import {
   PAGE_HOME,
@@ -50,11 +54,21 @@ import {
   PAGE_SCORE,
   PAGE_RESULTS,
   PAGE_WINNER,
+  PAGE_PRICE,
 } from "@/const/pages.js";
 
 export default {
   name: "Screen",
-  components: { Home, Puzzle, Score, Question, Penalty, Results, Winner },
+  components: {
+    Home,
+    Puzzle,
+    Score,
+    Question,
+    Penalty,
+    Results,
+    Winner,
+    Price,
+  },
   data() {
     return {
       game: null,
@@ -97,6 +111,9 @@ export default {
     },
     showWinner() {
       return this.game && this.game.page === PAGE_WINNER;
+    },
+    showPrice() {
+      return this.game && this.game.page === PAGE_PRICE;
     },
     teamsList() {
       return this.teams;

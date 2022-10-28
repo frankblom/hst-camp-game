@@ -3,7 +3,7 @@
     <div class="w-full" id="party">
       <img class="mx-auto" src="@/assets/party.svg" />
     </div>
-    <h2 class="message uppercase">
+    <h2 class="message uppercase" v-if="team">
       Gratulerer til
       <span :class="`text-team-${team.name}`"
         >{{ $t(`congrats-team-${team.name}`) }}

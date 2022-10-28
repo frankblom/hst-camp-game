@@ -8,6 +8,7 @@ export const PENALTY_STEP = 20;
 export const APPLY_PENALTY_STEP = 21;
 export const RESULT_STEP = 30;
 export const WINNER_STEP = 40;
+export const PRICES_STEP = 50;
 
 export const STEP_LABELS = {
   [NO_STEP]: "Vis",
@@ -20,6 +21,7 @@ export const STEP_LABELS = {
   [APPLY_PENALTY_STEP]: "Set Straff",
   [RESULT_STEP]: "Vis total resutlat",
   [WINNER_STEP]: "Vis Winner",
+  [PRICES_STEP]: "Pick 10 winners",
 };
 
 export const PRE_GAME_STEPS = [
@@ -43,4 +45,4 @@ export const GAME_STEPS = [
 
 export const CHALLANGE_STEPS = [NO_STEP, RESULT_STEP];
 export const SCORE_STEPS = [NO_STEP, RESULT_STEP];
-export const FINISH_STEPS = [NO_STEP, RESULT_STEP, WINNER_STEP];
+export const FINISH_STEPS = [NO_STEP, RESULT_STEP, WINNER_STEP, PRICES_STEP];

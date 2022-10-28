@@ -107,7 +107,7 @@ export default {
 
 .answer-text {
   position: absolute;
-  font-size: 24px;
+  font-size: 28px;
   line-height: 38px;
   font-weight: bold;
   left: 120px;
