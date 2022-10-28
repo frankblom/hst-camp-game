@@ -4,8 +4,11 @@
       <img class="mx-auto" src="@/assets/party.svg" />
     </div>
     <h2 class="message uppercase">
-      Gratulerer
-      <span :class="`text-team-${team.name}`">{{ $t(team.name) }}</span> lag
+      Gratulerer til
+      <span :class="`text-team-${team.name}`"
+        >{{ $t(`congrats-team-${team.name}`) }}
+      </span>
+      lag!
     </h2>
   </div>
 </template>
