@@ -60,7 +60,7 @@ export default {
       return Boolean(this.player) === false && this.loggin_in_attemt == false;
     },
     isKicked() {
-      return false;
+      return !this.isLoading && this.player.kicked;
     },
     isPlaying() {
       return !this.showLogin && !this.isLoading && !this.isKicked;
