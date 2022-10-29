@@ -83,6 +83,7 @@ const kickPlayers = async (team, question_id) => {
     .collection("players")
     .where("team_id", "==", team)
     .where("kicked", "==", false)
+    .where("logged_in", "==", true)
     .orderBy("age", "desc")
     .limit(penalty.count)
     .get();
