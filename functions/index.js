@@ -7,6 +7,7 @@ const getKickedAmount = async (team, percentage) => {
   const collectionRef = db.collection("players");
   const query = collectionRef
     .where("team_id", "==", team)
+	.where("logged_in", "==", true)
     .where("kicked", "==", false);
 
   const snapshot = await query.count().get();
