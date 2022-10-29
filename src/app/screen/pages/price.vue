@@ -8,7 +8,6 @@
           :key="p.id"
         >
           {{ p.name }}
-          <!-- <i>{{ p.church }}</i> -->
         </div>
       </div>
     </transition>
@@ -29,6 +28,7 @@ export default {
   },
   methods: {
     randomArray(max) {
+      console.log(`SHOWING ${max} players`);
       let array = [];
       if (max < 10) {
         for (let i = 0; i < max; i++) {
@@ -46,6 +46,7 @@ export default {
       return array;
     },
     getPlayers() {
+      console.log("SHOWING NEW LIST OF WINNERS");
       db.collection("players")
         .where("team_id", "==", this.team.name)
         .where("logged_in", "==", true)
@@ -54,7 +55,11 @@ export default {
         .then((ref) => {
           this.players = [];
           this.randomArray(ref.size).forEach((key) => {
-            this.players.push(ref.docs[key].data());
+            const p = ref.docs[key].data();
+            console.log(
+              `Showing player name: "${p.name}", Fellowship: "${p.church}"`
+            );
+            this.players.push(p);
           });
           this.show = true;
         });
