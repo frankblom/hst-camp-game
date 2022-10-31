@@ -26,7 +26,7 @@ import {
   where,
 } from "firebase/firestore";
 
-const teams = ["blue", "pink", "orange", "green"];
+const teams = ["blue", "pink"];
 
 export default {
   components: { ScoreLine },
@@ -45,12 +45,10 @@ export default {
     },
     isLoading() {
       // 4 for 4 teams
-      if (Object.keys(this.responses).length < 4) return true;
+      if (Object.keys(this.responses).length < 2) return true;
 
       if (Object.keys(this.responses[teams[0]].answers).length < 4) return true;
       if (Object.keys(this.responses[teams[1]].answers).length < 4) return true;
-      if (Object.keys(this.responses[teams[2]].answers).length < 4) return true;
-      if (Object.keys(this.responses[teams[3]].answers).length < 4) return true;
 
       return false;
     },
