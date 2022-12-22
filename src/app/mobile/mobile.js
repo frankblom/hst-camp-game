@@ -8,7 +8,7 @@ Vue.use(VueI18n);
 
 import messages from "@/locale/index.js";
 const i18n = new VueI18n({
-  locale: "en",
+  locale: "nb",
   messages,
 });
 
