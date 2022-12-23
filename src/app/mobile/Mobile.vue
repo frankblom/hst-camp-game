@@ -163,7 +163,7 @@ export default {
           if (!player.exists) {
             // create new player and redirect once done
             this.createPlayer(ref, key).then(() => {
-              location.replace("http://localhost:8080");
+              location.replace("https://gameshow.buk.no");
             });
           }
 
@@ -196,14 +196,14 @@ export default {
   },
   mounted() {
     const url = new URLSearchParams(window.location.search);
-    const test = url.get("test");
+    // const test = url.get("test");
 
-    if (test) {
-      this.loggin_in_attemt = true;
-      this.login(`test-${test}`);
-      console.log(test);
-      return;
-    }
+    // if (test) {
+    //   this.loggin_in_attemt = true;
+    //   this.login(`test-${test}`);
+    //   console.log(test);
+    //   return;
+    // }
 
     const session_pmo_id = localStorage.getItem("player");
 
@@ -220,7 +220,9 @@ export default {
 
     try {
       const data = jwt_decode(token);
-      return this.login(data.person_id);
+      // cache ID for future use.
+      localStorage.setItem("player", data.person_id);
+      location.replace("https://gameshow.buk.no");
     } catch (error) {
       console.log(error);
       return this.logout();
