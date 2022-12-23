@@ -1,13 +1,13 @@
 <template>
   <div class="px-4 flex flex h-screen flex-col text-white">
     <div
+      v-if="profile.name"
       class="w-full text-center flex-1 flex flex-col justify-center border-b"
     >
       <img class="w-20 h-20 mx-auto mb-4" src="@/assets/profile.png" />
       <p class="text-lg">{{ $t("logged-in-as") }}</p>
       <h2 class="text-4xl">{{ profile.name }}</h2>
     </div>
-
     <div
       class="w-full text-center flex-1 flex flex-col justify-center items-center"
     >
