@@ -12,7 +12,7 @@
 export default {
   methods: {
     login() {
-      location.replace("https://Brunstad.tv/r/quiz");
+      location.replace("https://brunstad.tv/r/quiz");
     },
   },
 };

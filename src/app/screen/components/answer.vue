@@ -4,7 +4,7 @@
       <span class="text-3xl font-bold disable-select">{{ option.label }}</span>
     </div>
     <div class="px-2 text-white disable-select answer-text flex items-center">
-      {{ $t(option.id) }}
+      {{ label }}
     </div>
     <div
       v-if="revealed"
@@ -55,6 +55,10 @@ export default {
     revealed: Boolean,
   },
   computed: {
+    label() {
+      // return this.$t("G-2-A");
+      return this.$t(this.option.id);
+    },
     isCorrect() {
       if (!this.revealed) return false;
       return this.option.correct === true;

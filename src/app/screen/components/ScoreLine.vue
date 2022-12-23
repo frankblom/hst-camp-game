@@ -24,7 +24,8 @@ export default {
   },
   computed: {
     labels() {
-      return ["A", "B", "C", "D"];
+      return Object.keys(this.answers).sort();
+      // return ["A", "B", "C", "D"];
     },
   },
   methods: {
