@@ -26,7 +26,7 @@
 </template>
 
 <script>
-const points_order = [10, 5, 3, 0];
+// const points_order = [1, 0, 0, 0];
 export default {
   props: {
     question: Object,
@@ -60,10 +60,14 @@ export default {
         return;
       }
 
-      if (!this.isQuestion) return 0;
+      if (!this.question.with_points) return 0;
 
       const position = this.order.indexOf(team);
-      const amount = points_order[position];
+
+      const amount =
+        this.question.point_order.length < position
+          ? 0
+          : this.question.point_order[position];
 
       this.$set(this.form, team, amount);
     },

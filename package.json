@@ -6,8 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "vue-cli-service serve",
-    "set-questions": "node scripts/import_questions.js"
+    "start": "vue-cli-service serve"
   },
   "dependencies": {
     "autoprefixer": "^9",

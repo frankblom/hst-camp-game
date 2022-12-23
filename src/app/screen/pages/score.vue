@@ -44,13 +44,18 @@ export default {
       return this.question.correct;
     },
     isLoading() {
+      const option_count = this.question.answers;
       // 4 for 4 teams
       if (Object.keys(this.responses).length < 4) return true;
 
-      if (Object.keys(this.responses[teams[0]].answers).length < 4) return true;
-      if (Object.keys(this.responses[teams[1]].answers).length < 4) return true;
-      if (Object.keys(this.responses[teams[2]].answers).length < 4) return true;
-      if (Object.keys(this.responses[teams[3]].answers).length < 4) return true;
+      if (Object.keys(this.responses[teams[0]].answers).length < option_count)
+        return true;
+      if (Object.keys(this.responses[teams[1]].answers).length < option_count)
+        return true;
+      if (Object.keys(this.responses[teams[2]].answers).length < option_count)
+        return true;
+      if (Object.keys(this.responses[teams[3]].answers).length < option_count)
+        return true;
 
       return false;
     },
@@ -75,6 +80,7 @@ export default {
       });
     },
     result() {
+      console.log(this.order);
       if (this.isLoading) return [];
 
       return this.order.map((team, index) => ({

@@ -12,6 +12,9 @@
       <Header :profile="player" @click="triggerProfile" :show="showProfile" />
       <Profile v-if="showProfile" :profile="player" @logout="logout" />
       <transition name="fade">
+        <TeamSelect v-if="hasNoTeam" :profile="player" @select="pickTeam" />
+      </transition>
+      <transition name="fade">
         <Waiting v-if="isWaiting" />
       </transition>
       <transition name="fade">
@@ -22,6 +25,7 @@
           :response="savedAnswer"
         />
       </transition>
+
       <transition name="fade">
         <Gameover v-if="isKicked" />
       </transition>
@@ -37,12 +41,22 @@ import Header from "./components/header.vue";
 import Loading from "./components/loading.vue";
 import Question from "./pages/question.vue";
 import Gameover from "./pages/gameover.vue";
+import TeamSelect from "./pages/teamselect.vue";
 import { db } from "./db";
 import jwt_decode from "jwt-decode";
 import { PAGE_QUESTION, PAGE_SCORE } from "@/const/pages.js";
 
 export default {
-  components: { Login, Waiting, Profile, Header, Question, Gameover, Loading },
+  components: {
+    Login,
+    Waiting,
+    Profile,
+    Header,
+    Question,
+    Gameover,
+    Loading,
+    TeamSelect,
+  },
   data() {
     return {
       player: null,
@@ -62,8 +76,13 @@ export default {
     isKicked() {
       return !this.isLoading && this.player.kicked;
     },
+    hasNoTeam() {
+      return !this.isLoading && this.player.team_id == "";
+    },
     isPlaying() {
-      return !this.showLogin && !this.isLoading && !this.isKicked;
+      return (
+        !this.showLogin && !this.isLoading && !this.isKicked && !this.hasNoTeam
+      );
     },
     isWaiting() {
       if (!this.isPlaying) return false;
@@ -96,6 +115,10 @@ export default {
     },
   },
   methods: {
+    pickTeam(team_id) {
+      console.log(this.player);
+      db.collection("players").doc(this.player.id).update({ team_id });
+    },
     triggerProfile() {
       if (this.showProfile) {
         this.showProfile = false;
@@ -113,6 +136,18 @@ export default {
         team_id: this.player.team_id,
       });
     },
+    createPlayer(ref, id) {
+      return ref.set({
+        id,
+        age: 0,
+        answers: {},
+        church: "",
+        kicked: false,
+        logged_in: true,
+        name: "",
+        team_id: "",
+      });
+    },
     login(pmoid) {
       const key = `player-${pmoid}`;
 
@@ -122,23 +157,27 @@ export default {
       ref
         .get()
         .then((player) => {
-          if (!player.exists) {
-            alert("Beklager, kan ikke logge deg inn.");
-            return this.logout();
-          }
-
+          // cache ID for future use.
           localStorage.setItem("player", pmoid);
 
+          if (!player.exists) {
+            // create new player and redirect once done
+            this.createPlayer(ref, key).then(() => {
+              location.replace("http://localhost:8080");
+            });
+          }
+
+          // mark the player as logged in
           if (!player.data().logged_in) {
             ref.update({ logged_in: true });
           }
 
+          // bind the objects for future use
           this.$bind("player", ref);
           this.$bind(
             "answers",
             db.collection("answers").where("user_id", "==", key)
           );
-
           this.$bind("game", db.collection("games").doc("game"));
           return true;
         })
