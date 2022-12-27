@@ -11,18 +11,18 @@
     <Clock v-if="loaded" :game="game" :remaining="remaining" />
     <TeamBar
       v-if="loaded"
-      :team="teamByKey('green')"
-      key="green"
-      :count="playerCount.green"
-      :penalties="penaltiesForTeam('green')"
+      :team="teamByKey('yellow')"
+      key="yellow"
+      :count="playerCount.yellow"
+      :penalties="penaltiesForTeam('yellow')"
       :question="currentQuestion"
     />
     <TeamBar
       v-if="loaded"
-      :team="teamByKey('pink')"
-      key="pink"
-      :count="playerCount.pink"
-      :penalties="penaltiesForTeam('pink')"
+      :team="teamByKey('purple')"
+      key="purple"
+      :count="playerCount.purple"
+      :penalties="penaltiesForTeam('purple')"
       :question="currentQuestion"
     />
     <Clock v-if="loaded" :game="game" :remaining="remaining" />
@@ -66,8 +66,8 @@ export default {
       remaining: this.game?.question?.time,
       playerCount: {
         blue: 0,
-        pink: 0,
-        green: 0,
+        purple: 0,
+        yellow: 0,
         orange: 0,
       },
     };
@@ -144,8 +144,8 @@ export default {
 
     setInterval(() => {
       this.getCountForTeam("blue");
-      this.getCountForTeam("pink");
-      this.getCountForTeam("green");
+      this.getCountForTeam("purple");
+      this.getCountForTeam("yellow");
       this.getCountForTeam("orange");
     }, 2000);
 

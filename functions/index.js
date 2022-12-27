@@ -114,10 +114,10 @@ exports.executePenalty = functions.https.onCall(async (data) => {
   functions.logger.log(`data`, data);
 
   return Promise.all([
-    kickPlayers("green", question_id),
+    kickPlayers("yellow", question_id),
     kickPlayers("orange", question_id),
     kickPlayers("blue", question_id),
-    kickPlayers("pink", question_id),
+    kickPlayers("purple", question_id),
   ])
     .catch((err) => {
       functions.logger.error("error in execute penalty", err);

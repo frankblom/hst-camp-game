@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style>
-.team-green .bar {
+/* .team-green .bar {
   border-color: #95c93d;
 }
 .team-green .percentage-label {
@@ -62,26 +62,46 @@ export default {
 }
 .team-pink.highlighted .bar {
   background: #d31c67;
+} */
+
+.team-yellow .bar {
+  border-color: #ffde59;
+}
+.team-yellow .percentage-label {
+  color: #ffde59;
+}
+.team-yellow.highlighted .bar {
+  background: #ffde59;
+}
+
+.team-purple .bar {
+  border-color: #8c52ff;
+}
+.team-purple .percentage-label {
+  color: #8c52ff;
+}
+.team-purple.highlighted .bar {
+  background: #8c52ff;
 }
 
 .team-blue .bar {
-  border-color: #6fccdd;
+  border-color: #1ec5e0;
 }
 .team-blue .percentage-label {
-  color: #6fccdd;
+  color: #1ec5e0;
 }
 .team-blue.highlighted .bar {
-  background: #6fccdd;
+  background: #1ec5e0;
 }
 
 .team-orange .bar {
-  border-color: #f68b2a;
+  border-color: #fe7f30;
 }
 .team-orange .percentage-label {
-  color: #f68b2a;
+  color: #fe7f30;
 }
 .team-orange.highlighted .bar {
-  background: #f68b2a;
+  background: #fe7f30;
 }
 
 .highlighted .answer-option {

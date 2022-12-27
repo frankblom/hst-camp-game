@@ -26,7 +26,7 @@
 </template>
 
 <script>
-const teams = ["blue", "pink", "orange", "green"];
+const teams = ["orange", "purple", "yellow", "blue"];
 
 import { db } from "../db";
 import {
@@ -74,7 +74,7 @@ export default {
           team: "blue",
           total: 0,
         },
-        green: {
+        yellow: {
           answers: {
             A: {
               count: 0,
@@ -93,7 +93,7 @@ export default {
               label: "D",
             },
           },
-          team: "blue",
+          team: "yellow",
           total: 0,
         },
         orange: {
@@ -115,10 +115,10 @@ export default {
               label: "D",
             },
           },
-          team: "blue",
+          team: "orange",
           total: 0,
         },
-        pink: {
+        purple: {
           answers: {
             A: {
               count: 0,
@@ -137,7 +137,7 @@ export default {
               label: "D",
             },
           },
-          team: "blue",
+          team: "purple",
           total: 0,
         },
       },

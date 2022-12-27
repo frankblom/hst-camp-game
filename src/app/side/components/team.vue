@@ -151,20 +151,28 @@ export default {
   fill: #747474;
   transition: fill 1s linear;
 }
-
+/* 
 .team-group-svg path.green {
   fill: #95c93d;
+} */
+
+.team-group-svg path.yellow {
+  fill: #ffde59;
 }
 
-.team-group-svg path.pink {
+/* .team-group-svg path.pink {
   fill: #d31c67;
+} */
+
+.team-group-svg path.purple {
+  fill: #8c52ff;
 }
 
 .team-group-svg path.blue {
-  fill: #6fccdd;
+  fill: #1ec5e0;
 }
 
 .team-group-svg path.orange {
-  fill: #f68b2a;
+  fill: #fe7f30;
 }
 </style>

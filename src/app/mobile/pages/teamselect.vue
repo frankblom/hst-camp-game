@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     options() {
-      return ["blue", "pink", "orange", "green"];
+      return ["orange", "purple", "yellow", "blue"];
     },
   },
 };

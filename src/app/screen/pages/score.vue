@@ -26,7 +26,7 @@ import {
   where,
 } from "firebase/firestore";
 
-const teams = ["blue", "pink", "orange", "green"];
+const teams = ["blue", "purple", "orange", "yellow"];
 
 export default {
   components: { ScoreLine },

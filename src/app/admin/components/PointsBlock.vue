@@ -39,8 +39,8 @@ export default {
       form: {
         orange: 0,
         blue: 0,
-        pink: 0,
-        green: 0,
+        purple: 0,
+        yellow: 0,
       },
     };
   },
