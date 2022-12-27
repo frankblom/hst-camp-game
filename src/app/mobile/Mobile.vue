@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="max-w-3xl mx-auto relative overflow-hidden">
-    <Login v-if="showLogin" @login="() => login(1004362)" />
+    <Login v-if="showLogin" />
     <div
       v-if="isLoading && !showLogin"
       class="flex items-center flex-col h-screen text-gray-200 text-3xl justify-center"
@@ -120,6 +120,8 @@ export default {
       db.collection("players").doc(this.player.id).update({ team_id });
     },
     triggerProfile() {
+      if (this.hasNoTeam) return;
+
       if (this.showProfile) {
         this.showProfile = false;
       } else {

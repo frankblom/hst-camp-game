@@ -15,9 +15,12 @@
       </select>
     </div>
 
-    <div class="text-white h-8 flex items-center" @click="$emit('click')">
+    <div
+      class="text-white h-8 flex items-center pointer"
+      @click="$emit('click')"
+    >
       <img class="w-8 h-8" src="@/assets/profile.png" v-if="!show" />
-      <span v-else>close</span>
+      <span v-else>Close</span>
     </div>
   </div>
 </template>
